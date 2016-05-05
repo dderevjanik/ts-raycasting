@@ -1,0 +1,35 @@
+{
+  "name": "ts-raycasting",
+  "version": "0.0.1",
+  "description": "raycasting in typescript",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "dev": "webpack-dev-server --config webpack-dev.config.js",
+    "lint": "npm run lint:src && npm run lint:test",
+    "lint:src": "tslint src/**/*.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dderevjanik/ts-raycasting"
+  },
+  "keywords": [
+    "rays",
+    "raycast",
+    "raycasting",
+    "2.5d",
+    "pseudo2d"
+  ],
+  "author": {
+    "name": "Daniel Derevjanik",
+    "email": "daniel.derevjanik@gmail.com"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^1.8.2",
+    "ts-loader": "^0.8.1",
+    "tslint": "^3.5.0",
+    "webpack": "^1.12.13",
+    "webpack-dev-server": "^1.14.1"
+  }
+}
