@@ -1,1 +1,0 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["src/Interfaces/IPoint.ts","src/Interfaces/IQuadrant.ts","src/Interfaces/IRay.ts","src/Interfaces/all.ts","src/Utils.ts","src/RayCast.ts"],"names":[],"mappings":""}
