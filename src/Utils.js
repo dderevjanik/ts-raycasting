@@ -1,30 +1,28 @@
-import {IQuadrant} from './Interfaces/all';
-
-const twoPI: number = Math.PI * 2;
-
+"use strict";
+var twoPI = Math.PI * 2;
 /**
  * From which quadrant are we looking out ?
  * @param {number} rot - rot to be normalized
  * @return {IQuadrant}
  */
-export const getQuadrant = (rot: number): IQuadrant => ({
+exports.getQuadrant = function (rot) { return ({
     top: ((rot < 0) || (rot > Math.PI)) ? true : false,
     right: ((rot > (twoPI * 0.75)) || (rot < (twoPI * 0.25))) ? true : false
-});
-
+}); };
 /**
  * Normalize angle to be between <0, 2*Math.Pi>
  * @param {number} rot
  * @retunr {number} normalized rot
  */
-export const normalizeAngle = (rot: number): number => {
-    const rayAngle: number = rot % twoPI;
+exports.normalizeAngle = function (rot) {
+    var rayAngle = rot % twoPI;
     return (rayAngle < 0)
         ? twoPI + rayAngle
         : rayAngle;
 };
-
-export default {
-    getQuadrant: getQuadrant,
-    normalizeAngle: normalizeAngle
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
+    getQuadrant: exports.getQuadrant,
+    normalizeAngle: exports.normalizeAngle
 };
+//# sourceMappingURL=Utils.js.map

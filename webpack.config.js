@@ -5,7 +5,7 @@ const webpack = require('webpack'),
     path = require('path');
 
 module.exports = {
-    entry: ['./src/Main.ts'],
+    entry: ['./src/RayCast.ts'],
     resolve: {
         extensions: ['', '.webpack.js', '.web.js', '.ts', '.js']
     },

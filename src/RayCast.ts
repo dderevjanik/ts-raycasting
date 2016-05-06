@@ -14,10 +14,10 @@ export type testfunction = (row: number, column: number, index: number) => boole
  * @return {IRay} information about ray, check type
  */
 export const castRay = (map: Array<Array<number>>, rot: number, x: number, y: number, test: testfunction, rayRot: number): IRay => {
-    const rayAngle: number = normalizeAngle(rayRot);
+    const rayAngle: number = normalizeAngle(rayRot);    // angle should be between <0, 2 * Math.PI>
     const angleSin: number = Math.sin(rayAngle);
     const angleCos: number = Math.cos(rayAngle);
-    const quadrant: IQuadrant = getQuadrant(rayRot);
+    const quadrant: IQuadrant = getQuadrant(rayRot);    // in which quadrant is ray looking
 
     // current cell position in map
     let column: number = Math.floor(x);

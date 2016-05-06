@@ -4,10 +4,17 @@
         "module": "commonjs",
         "sourceMap": true,
         "noImplicitAny": false,
-        "noLib": false
-    },
-    "exclude": [
-        "node_modules",
-        "typings"
+        "noLib": false,
+        "removeComments": false,
+        "declaration": true,
+        "outDir": "dist"
+    },  
+    "files": [
+        "src/Interfaces/all.ts",
+        "src/Interfaces/IPoint.ts",
+        "src/Interfaces/IQuadrant.ts",
+        "src/Interfaces/IRay.ts",
+        "src/RayCast.ts",
+        "src/Utils.ts"
     ]
 }

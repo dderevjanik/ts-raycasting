@@ -1,13 +1,11 @@
 {
   "name": "ts-raycasting",
   "version": "0.0.1",
-  "description": "raycasting in typescript",
-  "main": "dist/index.js",
+  "description": "Raycasting in typescript",
+  "main": "dist/RayCast.js",
   "scripts": {
-    "build": "webpack --config webpack.config.js",
-    "dev": "webpack-dev-server --config webpack-dev.config.js",
-    "lint": "npm run lint:src && npm run lint:test",
-    "lint:src": "tslint src/**/*.ts"
+    "build": "tsc",
+    "lint": "tslint src/**/*.ts"
   },
   "repository": {
     "type": "git",
