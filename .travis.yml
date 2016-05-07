@@ -4,5 +4,4 @@ node_js:
 before_script:
     - npm install -g tslint
 script:
-    - npm run test
     - npm run build
