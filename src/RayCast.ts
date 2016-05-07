@@ -48,7 +48,7 @@ export const castRay = (map: Array<Array<number>>, rot: number, x: number, y: nu
     const deltaDistX: number = Math.sqrt(stepX**2 + hdY**2);
     const deltaDistY: number = Math.sqrt(vdX**2 + stepY**2);
 
-    let side: number; // NS or ES wall hit ?
+    let side: number = (sideDistX < sideDistY) ? 0 : 1; // NS or ES wall hit ?
     let i: number = 0;
     while(test(row, column, i)) {
         if (sideDistX < sideDistY) {

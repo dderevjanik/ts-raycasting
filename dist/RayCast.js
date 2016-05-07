@@ -37,7 +37,7 @@ exports.castRay = function (map, rot, x, y, test, rayRot) {
     // distance from x || y  side to another x || y side
     var deltaDistX = Math.sqrt(Math.pow(stepX, 2) + Math.pow(hdY, 2));
     var deltaDistY = Math.sqrt(Math.pow(vdX, 2) + Math.pow(stepY, 2));
-    var side; // NS or ES wall hit ?
+    var side = (sideDistX < sideDistY) ? 0 : 1; // NS or ES wall hit ?
     var i = 0;
     while (test(row, column, i)) {
         if (sideDistX < sideDistY) {
