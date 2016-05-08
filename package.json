@@ -29,5 +29,8 @@
     "tslint": "^3.5.0",
     "webpack": "^1.12.13",
     "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "asdata": "git+https://github.com/dderevjanik/ts-rays.git"
   }
 }

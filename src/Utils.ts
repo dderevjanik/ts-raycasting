@@ -4,7 +4,7 @@ const twoPI: number = Math.PI * 2;
 
 /**
  * From which quadrant are we looking out ?
- * @param {number} rot - rot to be normalized
+ * @param {number} rot
  * @return {IQuadrant}
  */
 export const getQuadrant = (rot: number): IQuadrant => ({
@@ -14,8 +14,8 @@ export const getQuadrant = (rot: number): IQuadrant => ({
 
 /**
  * Normalize angle to be between <0, 2*Math.Pi>
- * @param {number} rot
- * @retunr {number} normalized rot
+ * @param {number} rot - rot to normalize, in radians
+ * @return {number} normalized rot
  */
 export const normalizeAngle = (rot: number): number => {
     const rayAngle: number = rot % twoPI;

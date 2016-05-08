@@ -1,20 +1,26 @@
 import {IRay, IQuadrant} from './Interfaces/all';
 import {normalizeAngle, getQuadrant} from './Utils';
 
+/**
+ * Test ray intersection
+ * @param {number} row - ray intersection with row
+ * @param {number} column - ray intersection with column
+ * @param {number} index - current index of intersection
+ */
 export type testfunction = (row: number, column: number, index: number) => boolean;
 
 /**
  * Cast one ray from position until test fails
  * @param {Array<Array<number>>} map - 2d map on which will be casted ray
- * @param {number} rot - current rot
+ * @param {number} rot - current rot in radians
  * @param {number} x - coordinate in map
  * @param {number} y - coordinate in map
- * @param {testfunction} test - thsi function is called on every intersection. If fail, fuction will return IRay
- * @param {number} rayRot - ray rot
+ * @param {testfunction} test - test function is called on every intersection. If fails, fuction will return IRay
+ * @param {number} rayRot - ray rot in radians
  * @return {IRay} information about ray, check type
  */
 export const castRay = (map: Array<Array<number>>, rot: number, x: number, y: number, test: testfunction, rayRot: number): IRay => {
-    const rayAngle: number = normalizeAngle(rayRot);    // angle should be between <0, 2 * Math.PI>
+    const rayAngle: number = normalizeAngle(rayRot);    // angle should be between <0, 2 * Math.PI>, @todo use fixed point and & operator
     const angleSin: number = Math.sin(rayAngle);
     const angleCos: number = Math.cos(rayAngle);
     const quadrant: IQuadrant = getQuadrant(rayRot);    // in which quadrant is ray looking
@@ -23,20 +29,22 @@ export const castRay = (map: Array<Array<number>>, rot: number, x: number, y: nu
     let column: number = Math.floor(x);
     let row: number = Math.floor(y);
 
-    const hSlope: number = (angleSin / angleCos);
-    const vSlope: number = (angleCos / angleSin);
+    const hSlope: number = (angleSin / angleCos);   // tan
+    const vSlope: number = (angleCos / angleSin);   // ctan
 
+    // horizontal intersection
     const stepX: number = (quadrant.right) ? 1 : -1;
     const hdY: number = stepX * hSlope;
 
+    // vertical intersection
     const stepY: number = (quadrant.top) ? -1 : 1;
     const vdX: number = stepY * vSlope;
 
-    // horizontal hit
+    // first horizontal hit
     let hHitX: number = (quadrant.right) ? Math.ceil(x) : column;
     let hHitY: number = y + ((hHitX - x) * hSlope);
 
-    // vertical hit
+    // first vertical hit
     let vHitY: number = (quadrant.top) ? row : Math.ceil(y);
     let vHitX: number = x + ((vHitY - y) * vSlope);
 
@@ -68,18 +76,24 @@ export const castRay = (map: Array<Array<number>>, rot: number, x: number, y: nu
     }
 
     return {
+        // ray distance from caster
         dist: (!side)
             // removing fisheye effect
             ? (sideDistX - deltaDistX) * Math.cos(rot - rayAngle)
             : (sideDistY - deltaDistY) * Math.cos(rot - rayAngle),
+        // side, which was hit. NS or ES
         side: side,
+        // ray x hit
         x: (side)
             ? (vHitX - vdX)
             : (hHitX - stepX),
+        // ray y hit
         y: (side)
             ? (vHitY - stepY)
             : (hHitY - hdY),
+        // ray row hit
         row: row,
+        // ray column hit
         column: column
     };
 };
@@ -87,18 +101,18 @@ export const castRay = (map: Array<Array<number>>, rot: number, x: number, y: nu
 /**
  * Cast rays from position
  * @param {Array<Array<number>>} map - 2d map on which will be casted ray
- * @param {number} x - coordinate in map
- * @param {number} y - coordinate in map
- * @param {number} rot - current rot
- * @param {number} fov - field of view
- * @param {number} count - number of rays to cast
+ * @param {number} x - camera coordinate in map
+ * @param {number} y - camera coordinate in map
+ * @param {number} rot - current rot of camera in radians
+ * @param {number} fov - camera field of view
+ * @param {number} count - number of rays to cast from camera
  * @param {testfunction} test - this function is called on every ray's intersection. If fail, fuction will return IRay
  * @return {Array<IRay>} information about ray, check type
  */
 export const castRays = (map: Array<Array<number>>, x: number, y: number, rot: number, fov: number, count: number, test: testfunction): Array<IRay> => {
     const castRayFromPosition: (rayRot: number) => IRay
         = castRay.bind(this, map, rot, x, y, test);
-    const dRot: number = (Math.PI / (180 / fov)) / count;
+    const dRot: number = (Math.PI / (180 / fov)) / count; // difference between each ray rot
     const rays: Array<IRay> = [];
 
     let i: number = 0;
