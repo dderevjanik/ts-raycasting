@@ -1,8 +1,11 @@
 {
   "name": "ts-raycasting",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Raycasting in typescript",
   "main": "dist/RayCast.js",
+  "typescript": {
+    "definition": "dist/RayCast.d.ts"
+  },
   "scripts": {
     "build": "tsc",
     "lint": "tslint src/**/*.ts"
@@ -29,8 +32,5 @@
     "tslint": "^3.5.0",
     "webpack": "^1.12.13",
     "webpack-dev-server": "^1.14.1"
-  },
-  "dependencies": {
-    "asdata": "git+https://github.com/dderevjanik/ts-rays.git"
   }
 }

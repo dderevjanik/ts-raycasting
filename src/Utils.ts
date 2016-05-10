@@ -1,4 +1,4 @@
-import {IQuadrant} from './Interfaces/all';
+import {IQuadrant} from './Interfaces.ts';
 
 const twoPI: number = Math.PI * 2;
 

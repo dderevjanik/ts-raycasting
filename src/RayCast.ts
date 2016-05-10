@@ -1,5 +1,5 @@
-import {IRay, IQuadrant} from './Interfaces/all';
-import {normalizeAngle, getQuadrant} from './Utils';
+import {IRay, IQuadrant} from './Interfaces.ts';
+import {normalizeAngle, getQuadrant} from './Utils.ts';
 
 /**
  * Test ray intersection
@@ -20,9 +20,8 @@ export type testfunction = (row: number, column: number, index: number) => boole
  * @return {IRay} information about ray, check type
  */
 export const castRay = (map: Array<Array<number>>, rot: number, x: number, y: number, test: testfunction, rayRot: number): IRay => {
-    const rayAngle: number = normalizeAngle(rayRot);    // angle should be between <0, 2 * Math.PI>, @todo use fixed point and & operator
-    const angleSin: number = Math.sin(rayAngle);
-    const angleCos: number = Math.cos(rayAngle);
+    const angleSin: number = Math.sin(rayRot);
+    const angleCos: number = Math.cos(rayRot);
     const quadrant: IQuadrant = getQuadrant(rayRot);    // in which quadrant is ray looking
 
     // current cell position in map
@@ -57,7 +56,7 @@ export const castRay = (map: Array<Array<number>>, rot: number, x: number, y: nu
     const deltaDistY: number = Math.sqrt(vdX**2 + stepY**2);
 
     let side: number = (sideDistX < sideDistY) ? 0 : 1; // NS or ES wall hit ?
-    let i: number = 0;
+    let i: number = 0; // number of intersections
     while(test(row, column, i)) {
         if (sideDistX < sideDistY) {
             sideDistX += deltaDistX;
@@ -72,15 +71,15 @@ export const castRay = (map: Array<Array<number>>, rot: number, x: number, y: nu
             row += stepY;
             side = 1;
         }
-        i += 1;
+        i++;
     }
 
     return {
         // ray distance from caster
         dist: (!side)
             // removing fisheye effect
-            ? (sideDistX - deltaDistX) * Math.cos(rot - rayAngle)
-            : (sideDistY - deltaDistY) * Math.cos(rot - rayAngle),
+            ? (sideDistX - deltaDistX) * Math.cos(rot - rayRot)
+            : (sideDistY - deltaDistY) * Math.cos(rot - rayRot),
         // side, which was hit. NS or ES
         side: side,
         // ray x hit
@@ -110,14 +109,16 @@ export const castRay = (map: Array<Array<number>>, rot: number, x: number, y: nu
  * @return {Array<IRay>} information about ray, check type
  */
 export const castRays = (map: Array<Array<number>>, x: number, y: number, rot: number, fov: number, count: number, test: testfunction): Array<IRay> => {
+    const nRot: number = normalizeAngle(rot); // normalize rot to be between <0, Math.PI * 2>
     const castRayFromPosition: (rayRot: number) => IRay
-        = castRay.bind(this, map, rot, x, y, test);
+        = castRay.bind(this, map, nRot, x, y, test);
     const dRot: number = (Math.PI / (180 / fov)) / count; // difference between each ray rot
+    const center: number = rot - dRot * (count / 2) + (dRot / 2); // TODO: pre-calculate values
     const rays: Array<IRay> = [];
 
     let i: number = 0;
     while(i < count) {
-        rays.push(castRayFromPosition(i * dRot));
+        rays.push(castRayFromPosition(normalizeAngle(i * dRot + center)));
         i++;
     }
     return rays;

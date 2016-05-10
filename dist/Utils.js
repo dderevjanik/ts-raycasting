@@ -2,7 +2,7 @@
 var twoPI = Math.PI * 2;
 /**
  * From which quadrant are we looking out ?
- * @param {number} rot - rot to be normalized
+ * @param {number} rot
  * @return {IQuadrant}
  */
 exports.getQuadrant = function (rot) { return ({
@@ -11,8 +11,8 @@ exports.getQuadrant = function (rot) { return ({
 }); };
 /**
  * Normalize angle to be between <0, 2*Math.Pi>
- * @param {number} rot
- * @retunr {number} normalized rot
+ * @param {number} rot - rot to normalize, in radians
+ * @return {number} normalized rot
  */
 exports.normalizeAngle = function (rot) {
     var rayAngle = rot % twoPI;

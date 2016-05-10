@@ -10,10 +10,10 @@
         "outDir": "dist"
     },
     "files": [
-        "src/Interfaces/all.ts",
         "src/Interfaces/IPoint.ts",
         "src/Interfaces/IQuadrant.ts",
         "src/Interfaces/IRay.ts",
+        "src/Interfaces.ts",
         "src/RayCast.ts",
         "src/Utils.ts"
     ]
