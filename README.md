@@ -6,6 +6,8 @@ Small raycast library
 
 ## Overview
 
+![RayCastExample](docs/raycast.png)
+
 ### What is included
 
 - [x] casting a custom number of rays from camera position with specific direction
@@ -44,7 +46,7 @@ type testFunction = (row: number, column: number, index: number) => boolean;
 **IRay**
 
 ```ts
-import IRay from 'ts-raycasting/interfaces/IRay.d.ts
+import {IRay} from 'ts-raycasting/Interfaces.d.ts
 ```
 
 ```ts
