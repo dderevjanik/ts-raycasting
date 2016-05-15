@@ -17,7 +17,7 @@ Small raycast library
 - [x] removing fisheye effect
 - [x] checking every ray intersection with world cell
 - [ ] checking x and y position in world in test function
-- [ ] checking distance in test function
+- [x] checking distance in test function
 - [ ] optional fisheye effect
 
 ### Functions
@@ -27,32 +27,32 @@ Small raycast library
 **castRay**
 
 ```ts
-castRay(map: Array<Array<number>>, rot: number, x: number, y: number, test: testfunction, rayRot: number): IRay
+castRay(map: Array<Array<number>>, rot: number, x: number, y: number, intersection: testintersection, rayRot: number): IRay
 ```
 
 Will cast ray from position in map, which is two-dimensional world of numbers, where
 every number means a specific wall. *rot* is direction of camera or caster, and
-*rayRot* is direction of ray. To check if ray already hit a wall, there's **testfunction**
+*rayRot* is direction of ray. To check if ray already hit a wall, there's **intersection**
 callback. If testfunction returns false, then it'll stop casting ray further and
 it means that wall was hit.
 
 **castRays**
 
 ```ts
-castRays(map: Array<Array<number>>, x: number, y: number, rot: number, fov: number, count: number, test: testfunction): Array<IRay>
+castRays(map: Array<Array<number>>, x: number, y: number, rot: number, fov: number, count: number, intersection: testintersection): Array<IRay>
 ```
 
 Will cast several rays from position in map, which is two-dimensional world of numbers,
 where every number means a specific wall. *rot* is direction of camera or caster.
 **fov** parameters is camera/caster field of view. **count** stands for 'how many
 rays cast from camera/caster with specific fov'. To check if ray already hit a wall,
-there's **testfunction** callback. If testfunction returns false, then it'll stop
+there's **intersection** callback. If testfunction returns false, then it'll stop
 casting ray further and it means that wall was hit.
 
-**testFunction**
+**intersection**
 
 ```ts
-type testFunction = (row: number, column: number, index: number) => boolean;
+type testintersection = (row: number, column: number, dist: number, index: number) => boolean;
 ```
 
 It's same callback in both **castRay** and **castRays** function, where is put a
@@ -110,7 +110,7 @@ If ray hit a block, return *false* to stop casting ray further and then check po
 
 ```ts
 // casting ray from a camera
-const rays: Array<IRay> = tsrays.castRays(my2DMap, camX, camY, rot, fov, 256, (row: number, column: number, index: number): boolean => {
+const rays: Array<IRay> = tsrays.castRays(my2DMap, camX, camY, rot, fov, 256, (row: number, column: number, dist: number, index: number): boolean => {
     if (my2DMap[row][column] === 1) {
         // Wall hit !
         return false; // stop casting ray further

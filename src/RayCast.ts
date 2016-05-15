@@ -3,13 +3,14 @@ import {normalizeAngle, getQuadrant} from './Utils.ts';
 
 /**
  * Test ray intersection
- * Here you should put code to check if ray hit a wall or not. I ray hit wall, return false.
+ * Here you should put code to check if ray hit a wall or not. If ray hits wall, return false.
  * @param {number} row - ray intersection with row
  * @param {number} column - ray intersection with column
+ * @param {number} dist - distance from caster to current intersection
  * @param {number} index - current index of intersection
  * @return {boolean} true to stop casting a ray further
  */
-export type testfunction = (row: number, column: number, index: number) => boolean;
+export type testintersection = (row: number, column: number, dist: number, index: number) => boolean;
 
 /**
  * Cast one ray from position until test fails
@@ -17,11 +18,11 @@ export type testfunction = (row: number, column: number, index: number) => boole
  * @param {number} rot - camera rot, in radians
  * @param {number} x - coordinate in map
  * @param {number} y - coordinate in map
- * @param {testfunction} test - test function is called on every intersection. If fails, fuction will return IRay
+ * @param {testintersection} intersection - test function is called on every intersection. If fails, fuction will return IRay
  * @param {number} rayRot - rot of ray in radians
  * @return {IRay} information about ray, check IRay type
  */
-export const castRay = (map: Array<Array<number>>, rot: number, x: number, y: number, test: testfunction, rayRot: number): IRay => {
+export const castRay = (map: Array<Array<number>>, rot: number, x: number, y: number, intersection: testintersection, rayRot: number): IRay => {
     const angleSin: number = Math.sin(rayRot);
     const angleCos: number = Math.cos(rayRot);
     const quadrant: IQuadrant = getQuadrant(rayRot); // in which quadrant is ray looking to
@@ -57,21 +58,26 @@ export const castRay = (map: Array<Array<number>>, rot: number, x: number, y: nu
     const deltaDistX: number = Math.sqrt(stepX**2 + hdY**2);
     const deltaDistY: number = Math.sqrt(vdX**2 + stepY**2);
 
-    let side: number = (sideDistX < sideDistY) ? 0 : 1; // NS or ES wall hit ?
+    let side: number = (sideDistX < sideDistY) ? 0 : 1; // NS or EW wall hit ?
+    let dist: number = (sideDistX < sideDistY) ? sideDistX : sideDistY; // initial distance from caster to intersection
     let i: number = 0; // number of intersections
     // @todo send hitX and hitY to test function
-    while(test(row, column, i)) {
+    while(intersection(row, column, dist, i)) {
         if (sideDistX < sideDistY) {
             sideDistX += deltaDistX;
             hHitX += stepX;
             hHitY += hdY;
+            // vars passed to testfunction
             column += stepX;
+            dist = sideDistX;
             side = 0;
         } else {
             sideDistY += deltaDistY;
             vHitX += vdX;
             vHitY += stepY;
+            // vars passed to testfunction
             row += stepY;
+            dist = sideDistY;
             side = 1;
         }
         i++;
@@ -108,15 +114,15 @@ export const castRay = (map: Array<Array<number>>, rot: number, x: number, y: nu
  * @param {number} rot - camera rot, in radians
  * @param {number} fov - camera field of view, angle
  * @param {number} count - number of rays to cast from camera
- * @param {testfunction} test - this function is called on every ray's intersection. If fail, fuction will return IRay
+ * @param {testintersection} intersection - this function is called on every ray's intersection. If fail, fuction will return IRay
  * @return {Array<IRay>} all rays casted from position, check IRay type
  */
-export const castRays = (map: Array<Array<number>>, x: number, y: number, rot: number, fov: number, count: number, test: testfunction): Array<IRay> => {
+export const castRays = (map: Array<Array<number>>, x: number, y: number, rot: number, fov: number, count: number, intersection: testintersection): Array<IRay> => {
     const nRot: number = normalizeAngle(rot); // normalize rot to be between <0, Math.PI * 2>
     const castRayFromPosition: (rayRot: number) => IRay
-        = castRay.bind(this, map, nRot, x, y, test);
+        = castRay.bind(this, map, nRot, x, y, intersection);
     const dRot: number = (Math.PI / (180 / fov)) / count; // difference between each ray rot
-    const center: number = rot - dRot * (count / 2) + (dRot / 2); // TODO: pre-calculate values
+    const center: number = rot - dRot * (count / 2) + (dRot / 2);
 
     const rays: Array<IRay> = []; // casted rays
     let i: number = 0;
