@@ -1,4 +1,4 @@
-import { IQuadrant } from './Interfaces.ts';
+import { IQuadrant } from './Interfaces';
 /**
  * From which quadrant are we looking out ?
  * @param {number} rot

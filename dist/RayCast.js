@@ -1,6 +1,6 @@
 "use strict";
 var _this = this;
-var Utils_ts_1 = require('./Utils.ts');
+var Utils_1 = require('./Utils');
 /**
  * Cast one ray from position until test fails
  * @param {Array<Array<number>>} map - 2d world on which will be casted ray
@@ -14,7 +14,7 @@ var Utils_ts_1 = require('./Utils.ts');
 exports.castRay = function (map, rot, x, y, intersection, rayRot) {
     var angleSin = Math.sin(rayRot);
     var angleCos = Math.cos(rayRot);
-    var quadrant = Utils_ts_1.getQuadrant(rayRot); // in which quadrant is ray looking to
+    var quadrant = Utils_1.getQuadrant(rayRot); // in which quadrant is ray looking to
     // current cell position in map
     var column = Math.floor(x);
     var row = Math.floor(y);
@@ -96,15 +96,14 @@ exports.castRay = function (map, rot, x, y, intersection, rayRot) {
  * @return {Array<IRay>} all rays casted from position, check IRay type
  */
 exports.castRays = function (map, x, y, rot, fov, count, intersection) {
-    var nRot = Utils_ts_1.normalizeAngle(rot); // normalize rot to be between <0, Math.PI * 2>
-    var castRayFromPosition = exports.castRay.bind(_this, map, nRot, x, y, intersection);
+    var castRayFromPosition = exports.castRay.bind(_this, map, rot, x, y, intersection);
     var dRot = (Math.PI / (180 / fov)) / count; // difference between each ray rot
     var center = rot - dRot * (count / 2) + (dRot / 2);
     var rays = []; // casted rays
     var i = 0;
     while (i < count) {
         // it's important to normalize rot before casting it, to make sure that rot will continue in direction
-        rays.push(castRayFromPosition(Utils_ts_1.normalizeAngle(i * dRot + center)));
+        rays.push(castRayFromPosition(Utils_1.normalizeAngle(i * dRot + center)));
         i++;
     }
     return rays;
@@ -114,4 +113,3 @@ exports.default = {
     castRay: exports.castRay,
     castRays: exports.castRays
 };
-//# sourceMappingURL=RayCast.js.map

@@ -1,4 +1,4 @@
-import { IRay } from './Interfaces.ts';
+import { IRay } from './Interfaces';
 /**
  * Test ray intersection
  * Here you should put code to check if ray hit a wall or not. If ray hits wall, return false.

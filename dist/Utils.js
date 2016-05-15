@@ -25,4 +25,3 @@ exports.default = {
     getQuadrant: exports.getQuadrant,
     normalizeAngle: exports.normalizeAngle
 };
-//# sourceMappingURL=Utils.js.map

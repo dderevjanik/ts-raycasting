@@ -27,7 +27,7 @@ Small raycast library
 **castRay**
 
 ```ts
-castRay(map: Array<Array<number>>, rot: number, x: number, y: number, intersection: testintersection, rayRot: number): IRay
+castRay(map: number[][], rot: number, x: number, y: number, intersection: testintersection, rayRot: number): IRay
 ```
 
 Will cast ray from position in map, which is two-dimensional world of numbers, where
@@ -39,7 +39,7 @@ it means that wall was hit.
 **castRays**
 
 ```ts
-castRays(map: Array<Array<number>>, x: number, y: number, rot: number, fov: number, count: number, intersection: testintersection): Array<IRay>
+castRays(map: number[][], x: number, y: number, rot: number, fov: number, count: number, intersection: testintersection): IRay[]
 ```
 
 Will cast several rays from position in map, which is two-dimensional world of numbers,
@@ -89,7 +89,7 @@ import tsrays from 'ts-raycasting';
 and have 2D map created. For example binary map. 1 means wall, 0 = empty space.
 
 ```ts
-const my2DMap: Array<Array<number>> =  [
+const my2DMap: number[][] =  [
     [1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 1],
@@ -110,7 +110,7 @@ If ray hit a block, return *false* to stop casting ray further and then check po
 
 ```ts
 // casting ray from a camera
-const rays: Array<IRay> = tsrays.castRays(my2DMap, camX, camY, rot, fov, 256, (row: number, column: number, dist: number, index: number): boolean => {
+const rays: IRay[] = tsrays.castRays(my2DMap, camX, camY, rot, fov, 256, (row: number, column: number, dist: number, index: number): boolean => {
     if (my2DMap[row][column] === 1) {
         // Wall hit !
         return false; // stop casting ray further

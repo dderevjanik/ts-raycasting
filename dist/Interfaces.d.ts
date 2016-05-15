@@ -1,3 +1,3 @@
-export * from './Interfaces/IPoint.ts';
-export * from './Interfaces/IQuadrant.ts';
-export * from './Interfaces/IRay.ts';
+export * from './interfaces/IPoint';
+export * from './interfaces/IQuadrant';
+export * from './interfaces/IRay';

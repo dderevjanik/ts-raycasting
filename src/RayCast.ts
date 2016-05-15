@@ -1,5 +1,5 @@
-import {IRay, IQuadrant} from './Interfaces.ts';
-import {normalizeAngle, getQuadrant} from './Utils.ts';
+import {IRay, IQuadrant} from './Interfaces';
+import {normalizeAngle, getQuadrant} from './Utils';
 
 /**
  * Test ray intersection
@@ -22,7 +22,7 @@ export type testintersection = (row: number, column: number, dist: number, index
  * @param {number} rayRot - rot of ray in radians
  * @return {IRay} information about ray, check IRay type
  */
-export const castRay = (map: Array<Array<number>>, rot: number, x: number, y: number, intersection: testintersection, rayRot: number): IRay => {
+export const castRay = (map: number[][], rot: number, x: number, y: number, intersection: testintersection, rayRot: number): IRay => {
     const angleSin: number = Math.sin(rayRot);
     const angleCos: number = Math.cos(rayRot);
     const quadrant: IQuadrant = getQuadrant(rayRot); // in which quadrant is ray looking to
@@ -117,14 +117,13 @@ export const castRay = (map: Array<Array<number>>, rot: number, x: number, y: nu
  * @param {testintersection} intersection - this function is called on every ray's intersection. If fail, fuction will return IRay
  * @return {Array<IRay>} all rays casted from position, check IRay type
  */
-export const castRays = (map: Array<Array<number>>, x: number, y: number, rot: number, fov: number, count: number, intersection: testintersection): Array<IRay> => {
-    const nRot: number = normalizeAngle(rot); // normalize rot to be between <0, Math.PI * 2>
+export const castRays = (map: number[][], x: number, y: number, rot: number, fov: number, count: number, intersection: testintersection): IRay[] => {
     const castRayFromPosition: (rayRot: number) => IRay
-        = castRay.bind(this, map, nRot, x, y, intersection);
+        = castRay.bind(this, map, rot, x, y, intersection);
     const dRot: number = (Math.PI / (180 / fov)) / count; // difference between each ray rot
     const center: number = rot - dRot * (count / 2) + (dRot / 2);
 
-    const rays: Array<IRay> = []; // casted rays
+    const rays: IRay[] = []; // casted rays
     let i: number = 0;
     while(i < count) {
         // it's important to normalize rot before casting it, to make sure that rot will continue in direction
