@@ -34,7 +34,6 @@
         "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
         "whitespace": [true,
             "check-decl",
-            "check-operator",
             "check-module",
             "check-seperator",
             "check-type",
