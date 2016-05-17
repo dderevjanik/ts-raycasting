@@ -1,5 +1,12 @@
-import {IRay, IQuadrant} from './Interfaces';
+import {IQuadrant, IRay, IRayConf} from './Interfaces';
 import {normalizeAngle, getQuadrant, removeFisheye} from './Utils';
+
+// default castRays configuration
+const defaultConfig: IRayConf = {
+    count: 256,
+    fov: 60,
+    fisheye: false
+};
 
 /**
  * Test ray intersection
@@ -112,29 +119,26 @@ export const castRay = (map: number[][], x: number, y: number, intersection: tes
  * @param {Array<Array<number>>} map - 2d world on which will be casted ray
  * @param {number} x - camera coordinate in map
  * @param {number} y - camera coordinate in map
- * @param {number} rot - camera rot, in radians
- * @param {number} fov - camera field of view, angle
- * @param {number} count - number of rays to cast from camera
- * @param {boolean} fisheye - should let fisheye effect ? default = true
  * @param {testintersection} intersection - this function is called on every ray's intersection. If fail, fuction will return IRay
+ * @param {IRayConf} config - additional configuration
  * @return {Array<IRay>} all rays casted from position, check IRay type
  */
-export const castRays = (map: number[][], x: number, y: number, rot: number, fov: number, count: number, fisheye: boolean = false, intersection: testintersection): IRay[] => {
+export const castRays = (map: number[][], x: number, y: number, rot: number, intersection: testintersection, config: IRayConf = defaultConfig): IRay[] => {
     const castRayFromPosition: (rayRot: number) => IRay
-        = castRay.bind(this, map, rot, x, y, intersection);
-    const dRot: number = (Math.PI / (180 / fov)) / count; // difference between each ray rot
-    const center: number = rot - dRot * (count / 2) + (dRot / 2);
+        = castRay.bind(this, map, x, y, intersection);
+    const dRot: number = (Math.PI / (180 / config.fov)) / config.count; // difference between each ray rot
+    const center: number = rot - dRot * (config.count / 2) + (dRot / 2);
 
     const rays: IRay[] = []; // casted rays
     let i: number = 0;
-    if (fisheye) {
-        while(i < count) {
+    if (config.fisheye) {
+        while(i < config.count) {
             // it's important to normalize rot before casting it, to make sure that rot will continue in direction
             rays.push(castRayFromPosition(normalizeAngle(i * dRot + center)));
             i++;
         }
     } else {
-        while(i < count) {
+        while(i < config.count) {
             // it's important to normalize rot before casting it, to make sure that rot will continue in direction
             // also remove fisheye effect
             rays.push(removeFisheye(castRayFromPosition(normalizeAngle(i * dRot + center)), rot));

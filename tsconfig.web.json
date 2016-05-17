@@ -2,12 +2,7 @@
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",
-        "sourceMap": false,
-        "noImplicitAny": false,
-        "noLib": false,
-        "removeComments": false,
-        "declaration": true,
-        "outDir": "dist"
+        "sourceMap": false
     },
     "files": [
         "src/Interfaces/IPoint.ts",

@@ -1,4 +1,4 @@
-import { IRay } from './Interfaces';
+import { IRay, IRayConf } from './Interfaces';
 /**
  * Test ray intersection
  * Here you should put code to check if ray hit a wall or not. If ray hits wall, return false.
@@ -24,16 +24,13 @@ export declare const castRay: (map: number[][], x: number, y: number, intersecti
  * @param {Array<Array<number>>} map - 2d world on which will be casted ray
  * @param {number} x - camera coordinate in map
  * @param {number} y - camera coordinate in map
- * @param {number} rot - camera rot, in radians
- * @param {number} fov - camera field of view, angle
- * @param {number} count - number of rays to cast from camera
- * @param {boolean} fisheye - should let fisheye effect ? default = true
  * @param {testintersection} intersection - this function is called on every ray's intersection. If fail, fuction will return IRay
+ * @param {IRayConf} config - additional configuration
  * @return {Array<IRay>} all rays casted from position, check IRay type
  */
-export declare const castRays: (map: number[][], x: number, y: number, rot: number, fov: number, count: number, fisheye: boolean, intersection: (row: number, column: number, dist: number, index: number) => boolean) => IRay[];
+export declare const castRays: (map: number[][], x: number, y: number, rot: number, intersection: (row: number, column: number, dist: number, index: number) => boolean, config?: IRayConf) => IRay[];
 declare var _default: {
     castRay: (map: number[][], x: number, y: number, intersection: (row: number, column: number, dist: number, index: number) => boolean, rayRot: number) => IRay;
-    castRays: (map: number[][], x: number, y: number, rot: number, fov: number, count: number, fisheye: boolean, intersection: (row: number, column: number, dist: number, index: number) => boolean) => IRay[];
+    castRays: (map: number[][], x: number, y: number, rot: number, intersection: (row: number, column: number, dist: number, index: number) => boolean, config?: IRayConf) => IRay[];
 };
 export default _default;

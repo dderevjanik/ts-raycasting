@@ -13,12 +13,16 @@ Small raycast library
 ### What is included
 
 - [x] casting a custom number of rays from camera position with specific direction
-- [x] normalizing angle to be <0, Math.PI * 2>
+- [x] normalizing angle to be `<0, Math.PI * 2>`
 - [x] removing fisheye effect
 - [x] checking every ray intersection with world cell
 - [ ] checking x and y position in world in test function
 - [x] checking distance in test function
 - [x] optional fisheye effect
+
+### Example
+
+Basic example of raycasting (without moving around) can be found in [./example](example)
 
 ### Functions
 
@@ -38,15 +42,14 @@ it means that wall was hit.
 **castRays**
 
 ```ts
-castRays(map: number[][], x: number, y: number, rot: number, fov: number, count: number, fisheye: boolean = false, intersection: testintersection): IRay[]
+castRays(map: number[][], x: number, y: number, rot: number, intersection: testintersection, config: IRayConf = defaultConfig): IRay[]
 ```
 
 Will cast several rays from position in map, which is two-dimensional world of numbers,
 where every number means a specific wall. *rot* is direction of camera or caster.
-**fov** parameters is camera/caster field of view. **count** stands for 'how many
-rays cast from camera/caster with specific fov'. To check if ray already hit a wall,
-there's **intersection** callback. If testfunction returns false, then it'll stop
-casting ray further and it means that wall was hit.
+To check if ray already hit a wall, there's **intersection** callback.
+If testfunction returns false, then it'll stop casting ray further and it
+means that wall was hit.
 
 **intersection**
 
@@ -60,10 +63,24 @@ ray further (specific ray, not all rays in **castRays** function).
 
 ### Interfaces
 
+**IRayConf**
+
+```ts
+import {IRayConf} from 'ts-raycasting/Interfaces.d.ts';
+```
+
+```ts
+interface IRayConf {
+    fov: number;        // field of view, Angle
+    count: number;      // number of rays to cast
+    fisheye: boolean;   // fisheye effect ?
+};
+```
+
 **IRay**
 
 ```ts
-import {IRay} from 'ts-raycasting/Interfaces.d.ts
+import {IRay} from 'ts-raycasting/Interfaces.d.ts';
 ```
 
 ```ts
@@ -110,17 +127,20 @@ If ray hit a block, return *false* to stop casting ray further and then check po
 
 ```ts
 // casting ray from a camera
-const rays: IRay[] = tsrays.castRays(my2DMap, camX, camY, rot, fov, 256, false, (row: number, column: number, dist: number, index: number): boolean => {
+const rays: IRay[] = tsrays.castRays(my2DMap, camX, camY, rot, (row: number, column: number, dist: number, index: number): boolean => {
     if (my2DMap[row][column] === 1) {
         // Wall hit !
         return false; // stop casting ray further
     } else {
         return true; // continue with casting ray
     }
-});
+}, {fov: fov, count: 256, fisheye: false});
 ```
 
 ## Scripts
 
 - `npm run build` build library, everything will be in `dist/` folder
+- `npm run build:web` build minified raycast library for browser
+- `npm run build:node` build library with all declaration files
+- `npm run build:example` build examples
 - `npm run lint` lint all .ts files
