@@ -18,7 +18,7 @@ Small raycast library
 - [x] checking every ray intersection with world cell
 - [ ] checking x and y position in world in test function
 - [x] checking distance in test function
-- [ ] optional fisheye effect
+- [x] optional fisheye effect
 
 ### Functions
 
@@ -27,19 +27,18 @@ Small raycast library
 **castRay**
 
 ```ts
-castRay(map: number[][], rot: number, x: number, y: number, intersection: testintersection, rayRot: number): IRay
+castRay(map: number[][], x: number, y: number, intersection: testintersection, rayRot: number): IRay
 ```
 
 Will cast ray from position in map, which is two-dimensional world of numbers, where
-every number means a specific wall. *rot* is direction of camera or caster, and
-*rayRot* is direction of ray. To check if ray already hit a wall, there's **intersection**
+every number means a specific wall. To check if ray already hit a wall, there's **intersection**
 callback. If testfunction returns false, then it'll stop casting ray further and
 it means that wall was hit.
 
 **castRays**
 
 ```ts
-castRays(map: number[][], x: number, y: number, rot: number, fov: number, count: number, intersection: testintersection): IRay[]
+castRays(map: number[][], x: number, y: number, rot: number, fov: number, count: number, fisheye: boolean = false, intersection: testintersection): IRay[]
 ```
 
 Will cast several rays from position in map, which is two-dimensional world of numbers,
@@ -72,7 +71,8 @@ interface IRay {
     x: number;          // ray's x hit position in map
     y: number;          // ray's y hit position in map
     dist: number;       // distance from original position to hit position
-    side: number;       // side of hit, 0 = NS, 1 = SE
+    side: number;       // side of hit, 0 = NS, 1 = WE
+    rot: number;        // ray rot
     row: number;        // ray's row hit
     column: number;     // ray's column hit
 };
@@ -110,7 +110,7 @@ If ray hit a block, return *false* to stop casting ray further and then check po
 
 ```ts
 // casting ray from a camera
-const rays: IRay[] = tsrays.castRays(my2DMap, camX, camY, rot, fov, 256, (row: number, column: number, dist: number, index: number): boolean => {
+const rays: IRay[] = tsrays.castRays(my2DMap, camX, camY, rot, fov, 256, false, (row: number, column: number, dist: number, index: number): boolean => {
     if (my2DMap[row][column] === 1) {
         // Wall hit !
         return false; // stop casting ray further

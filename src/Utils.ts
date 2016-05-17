@@ -1,4 +1,4 @@
-import {IQuadrant} from './Interfaces';
+import {IQuadrant, IRay} from './Interfaces';
 
 const twoPI: number = Math.PI * 2;
 
@@ -24,7 +24,19 @@ export const normalizeAngle = (rot: number): number => {
         : rayAngle;
 };
 
+/**
+ * Remove fisheye effect
+ * @param {IRay} ray - ray to fix
+ * @param {number} camRot - camera rot
+ * @return {IRay} fixed ray
+ */
+export const removeFisheye = (ray: IRay, camRot: number): IRay => {
+    ray.dist = ray.dist * Math.cos(camRot - ray.rot);
+    return ray;
+};
+
 export default {
     getQuadrant: getQuadrant,
-    normalizeAngle: normalizeAngle
+    normalizeAngle: normalizeAngle,
+    removeFisheye: removeFisheye
 };

@@ -4,14 +4,13 @@ var Utils_1 = require('./Utils');
 /**
  * Cast one ray from position until test fails
  * @param {Array<Array<number>>} map - 2d world on which will be casted ray
- * @param {number} rot - camera rot, in radians
  * @param {number} x - coordinate in map
  * @param {number} y - coordinate in map
  * @param {testintersection} intersection - test function is called on every intersection. If fails, fuction will return IRay
  * @param {number} rayRot - rot of ray in radians
  * @return {IRay} information about ray, check IRay type
  */
-exports.castRay = function (map, rot, x, y, intersection, rayRot) {
+exports.castRay = function (map, x, y, intersection, rayRot) {
     var angleSin = Math.sin(rayRot);
     var angleCos = Math.cos(rayRot);
     var quadrant = Utils_1.getQuadrant(rayRot); // in which quadrant is ray looking to
@@ -38,7 +37,7 @@ exports.castRay = function (map, rot, x, y, intersection, rayRot) {
     // distance from x || y  side to another x || y side
     var deltaDistX = Math.sqrt(Math.pow(stepX, 2) + Math.pow(hdY, 2));
     var deltaDistY = Math.sqrt(Math.pow(vdX, 2) + Math.pow(stepY, 2));
-    var side = (sideDistX < sideDistY) ? 0 : 1; // NS or EW wall hit ?
+    var side = (sideDistX < sideDistY) ? 0 : 1; // NS or WE wall hit ?
     var dist = (sideDistX < sideDistY) ? sideDistX : sideDistY; // initial distance from caster to intersection
     var i = 0; // number of intersections
     // @todo send hitX and hitY to test function
@@ -66,9 +65,9 @@ exports.castRay = function (map, rot, x, y, intersection, rayRot) {
     return {
         // ray distance from caster
         dist: (!side)
-            ? (sideDistX - deltaDistX) * Math.cos(rot - rayRot)
-            : (sideDistY - deltaDistY) * Math.cos(rot - rayRot),
-        // side, which was hit. NS or ES
+            ? (sideDistX - deltaDistX)
+            : (sideDistY - deltaDistY),
+        // side, which was hit. NS or WE
         side: side,
         // ray x hit
         x: (side)
@@ -78,6 +77,8 @@ exports.castRay = function (map, rot, x, y, intersection, rayRot) {
         y: (side)
             ? (vHitY - stepY)
             : (hHitY - hdY),
+        // ray rot
+        rot: rayRot,
         // ray row hit
         row: row,
         // ray column hit
@@ -92,19 +93,31 @@ exports.castRay = function (map, rot, x, y, intersection, rayRot) {
  * @param {number} rot - camera rot, in radians
  * @param {number} fov - camera field of view, angle
  * @param {number} count - number of rays to cast from camera
+ * @param {boolean} fisheye - should let fisheye effect ? default = true
  * @param {testintersection} intersection - this function is called on every ray's intersection. If fail, fuction will return IRay
  * @return {Array<IRay>} all rays casted from position, check IRay type
  */
-exports.castRays = function (map, x, y, rot, fov, count, intersection) {
+exports.castRays = function (map, x, y, rot, fov, count, fisheye, intersection) {
+    if (fisheye === void 0) { fisheye = false; }
     var castRayFromPosition = exports.castRay.bind(_this, map, rot, x, y, intersection);
     var dRot = (Math.PI / (180 / fov)) / count; // difference between each ray rot
     var center = rot - dRot * (count / 2) + (dRot / 2);
     var rays = []; // casted rays
     var i = 0;
-    while (i < count) {
-        // it's important to normalize rot before casting it, to make sure that rot will continue in direction
-        rays.push(castRayFromPosition(Utils_1.normalizeAngle(i * dRot + center)));
-        i++;
+    if (fisheye) {
+        while (i < count) {
+            // it's important to normalize rot before casting it, to make sure that rot will continue in direction
+            rays.push(castRayFromPosition(Utils_1.normalizeAngle(i * dRot + center)));
+            i++;
+        }
+    }
+    else {
+        while (i < count) {
+            // it's important to normalize rot before casting it, to make sure that rot will continue in direction
+            // also remove fisheye effect
+            rays.push(Utils_1.removeFisheye(castRayFromPosition(Utils_1.normalizeAngle(i * dRot + center)), rot));
+            i++;
+        }
     }
     return rays;
 };

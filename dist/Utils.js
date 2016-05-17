@@ -20,8 +20,19 @@ exports.normalizeAngle = function (rot) {
         ? twoPI + rayAngle
         : rayAngle;
 };
+/**
+ * Remove fisheye effect
+ * @param {IRay} ray - ray to fix
+ * @param {number} camRot - camera rot
+ * @return {IRay} fixed ray
+ */
+exports.removeFisheye = function (ray, camRot) {
+    ray.dist = ray.dist * Math.cos(camRot - ray.rot);
+    return ray;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {
     getQuadrant: exports.getQuadrant,
-    normalizeAngle: exports.normalizeAngle
+    normalizeAngle: exports.normalizeAngle,
+    removeFisheye: exports.removeFisheye
 };

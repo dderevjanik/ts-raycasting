@@ -1,5 +1,5 @@
 import {IRay, IQuadrant} from './Interfaces';
-import {normalizeAngle, getQuadrant} from './Utils';
+import {normalizeAngle, getQuadrant, removeFisheye} from './Utils';
 
 /**
  * Test ray intersection
@@ -15,14 +15,13 @@ export type testintersection = (row: number, column: number, dist: number, index
 /**
  * Cast one ray from position until test fails
  * @param {Array<Array<number>>} map - 2d world on which will be casted ray
- * @param {number} rot - camera rot, in radians
  * @param {number} x - coordinate in map
  * @param {number} y - coordinate in map
  * @param {testintersection} intersection - test function is called on every intersection. If fails, fuction will return IRay
  * @param {number} rayRot - rot of ray in radians
  * @return {IRay} information about ray, check IRay type
  */
-export const castRay = (map: number[][], rot: number, x: number, y: number, intersection: testintersection, rayRot: number): IRay => {
+export const castRay = (map: number[][], x: number, y: number, intersection: testintersection, rayRot: number): IRay => {
     const angleSin: number = Math.sin(rayRot);
     const angleCos: number = Math.cos(rayRot);
     const quadrant: IQuadrant = getQuadrant(rayRot); // in which quadrant is ray looking to
@@ -58,7 +57,7 @@ export const castRay = (map: number[][], rot: number, x: number, y: number, inte
     const deltaDistX: number = Math.sqrt(stepX**2 + hdY**2);
     const deltaDistY: number = Math.sqrt(vdX**2 + stepY**2);
 
-    let side: number = (sideDistX < sideDistY) ? 0 : 1; // NS or EW wall hit ?
+    let side: number = (sideDistX < sideDistY) ? 0 : 1; // NS or WE wall hit ?
     let dist: number = (sideDistX < sideDistY) ? sideDistX : sideDistY; // initial distance from caster to intersection
     let i: number = 0; // number of intersections
     // @todo send hitX and hitY to test function
@@ -86,10 +85,10 @@ export const castRay = (map: number[][], rot: number, x: number, y: number, inte
     return {
         // ray distance from caster
         dist: (!side)
-            // removing fisheye effect, @todo it should be optional
-            ? (sideDistX - deltaDistX) * Math.cos(rot - rayRot)
-            : (sideDistY - deltaDistY) * Math.cos(rot - rayRot),
-        // side, which was hit. NS or ES
+            // removing fisheye effect
+            ? (sideDistX - deltaDistX)
+            : (sideDistY - deltaDistY),
+        // side, which was hit. NS or WE
         side: side,
         // ray x hit
         x: (side)
@@ -99,6 +98,8 @@ export const castRay = (map: number[][], rot: number, x: number, y: number, inte
         y: (side)
             ? (vHitY - stepY)
             : (hHitY - hdY),
+        // ray rot
+        rot: rayRot,
         // ray row hit
         row: row,
         // ray column hit
@@ -114,10 +115,11 @@ export const castRay = (map: number[][], rot: number, x: number, y: number, inte
  * @param {number} rot - camera rot, in radians
  * @param {number} fov - camera field of view, angle
  * @param {number} count - number of rays to cast from camera
+ * @param {boolean} fisheye - should let fisheye effect ? default = true
  * @param {testintersection} intersection - this function is called on every ray's intersection. If fail, fuction will return IRay
  * @return {Array<IRay>} all rays casted from position, check IRay type
  */
-export const castRays = (map: number[][], x: number, y: number, rot: number, fov: number, count: number, intersection: testintersection): IRay[] => {
+export const castRays = (map: number[][], x: number, y: number, rot: number, fov: number, count: number, fisheye: boolean = false, intersection: testintersection): IRay[] => {
     const castRayFromPosition: (rayRot: number) => IRay
         = castRay.bind(this, map, rot, x, y, intersection);
     const dRot: number = (Math.PI / (180 / fov)) / count; // difference between each ray rot
@@ -125,10 +127,19 @@ export const castRays = (map: number[][], x: number, y: number, rot: number, fov
 
     const rays: IRay[] = []; // casted rays
     let i: number = 0;
-    while(i < count) {
-        // it's important to normalize rot before casting it, to make sure that rot will continue in direction
-        rays.push(castRayFromPosition(normalizeAngle(i * dRot + center)));
-        i++;
+    if (fisheye) {
+        while(i < count) {
+            // it's important to normalize rot before casting it, to make sure that rot will continue in direction
+            rays.push(castRayFromPosition(normalizeAngle(i * dRot + center)));
+            i++;
+        }
+    } else {
+        while(i < count) {
+            // it's important to normalize rot before casting it, to make sure that rot will continue in direction
+            // also remove fisheye effect
+            rays.push(removeFisheye(castRayFromPosition(normalizeAngle(i * dRot + center)), rot));
+            i++;
+        }
     }
     return rays;
 };
