@@ -5,10 +5,10 @@
         "sourceMap": false
     },
     "files": [
-        "src/Interfaces/IPoint.ts",
-        "src/Interfaces/IQuadrant.ts",
-        "src/Interfaces/IRay.ts",
-        "src/Interfaces/IRayConf.ts",
+        "src/interfaces/IPoint.ts",
+        "src/interfaces/IQuadrant.ts",
+        "src/interfaces/IRay.ts",
+        "src/interfaces/IRayConf.ts",
         "src/Interfaces.ts",
         "src/RayCast.ts",
         "src/Utils.ts"
