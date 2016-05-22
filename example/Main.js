@@ -1,5 +1,3 @@
-/// <reference path="./../dist/RayCast.d.ts"/>
-/// <reference path="./../src/interfaces/IRay.ts"/>
 // initialize canvas
 var ctx = document.getElementById('canvas').getContext('2d');
 ctx.fillStyle = "black";
