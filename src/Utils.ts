@@ -1,7 +1,8 @@
 import {IQuadrant, IRay} from './Interfaces';
 
 const twoPI: number = Math.PI * 2;
-
+const halfPI: number = Math.PI * 0.5;
+const oneAndHalfPI: number = twoPI * 0.75;
 /**
  * From which quadrant are we looking out ?
  * @param {number} rot
@@ -9,7 +10,7 @@ const twoPI: number = Math.PI * 2;
  */
 export const getQuadrant = (rot: number): IQuadrant => ({
     top: ((rot < 0) || (rot > Math.PI)) ? true : false,
-    right: ((rot > (twoPI * 0.75)) || (rot < (twoPI * 0.25))) ? true : false
+    right: ((rot > oneAndHalfPI) || (rot < halfPI)) ? true : false
 });
 
 /**
