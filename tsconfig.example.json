@@ -6,6 +6,6 @@
         "outDir": "example"
     },
     "files": [
-        "example/Main.ts"
+        "example/Example.ts"
     ]
 }

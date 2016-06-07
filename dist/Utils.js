@@ -1,5 +1,7 @@
 "use strict";
 var twoPI = Math.PI * 2;
+var halfPI = Math.PI * 0.5;
+var oneAndHalfPI = twoPI * 0.75;
 /**
  * From which quadrant are we looking out ?
  * @param {number} rot
@@ -7,7 +9,7 @@ var twoPI = Math.PI * 2;
  */
 exports.getQuadrant = function (rot) { return ({
     top: ((rot < 0) || (rot > Math.PI)) ? true : false,
-    right: ((rot > (twoPI * 0.75)) || (rot < (twoPI * 0.25))) ? true : false
+    right: ((rot > oneAndHalfPI) || (rot < halfPI)) ? true : false
 }); };
 /**
  * Normalize angle to be between <0, 2*Math.Pi>

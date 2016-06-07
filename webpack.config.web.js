@@ -18,6 +18,7 @@ module.exports = {
         libraryTarget: 'var'
     },
     plugins: [
+        new webpack.optimize.UglifyJsPlugin(),
         new webpack.DefinePlugin({
             'VERSION': JSON.stringify(require('./package.json').version)
         })

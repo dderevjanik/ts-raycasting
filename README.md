@@ -22,7 +22,9 @@ Small raycast library
 
 ### Example
 
-Basic example of raycasting (without moving around) can be found in [./example](example)
+![Raycast Example](docs/raycasting-example.gif)
+
+Basic example of raycasting (without textures) can be found in [./example](example)
 
 ### Functions
 

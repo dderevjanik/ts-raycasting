@@ -22,9 +22,9 @@ const map: number[][] = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
-const camX: number = 3.5;
-const camY: number = 3.5;
-const camRot: number = 2.34;
+let camX: number = 3.5;
+let camY: number = 3.5;
+let camRot: number = 1.84;
 const h: number = 80;
 
 // test every ray's intersection
@@ -35,12 +35,18 @@ const testIntersection = (row: number, column: number): boolean => {
     return true;
 }
 
+// calculate new position
+const forward = (): void => {
+    camX += Math.cos(camRot) * 0.5;
+    camY += Math.sin(camRot) * 0.5;
+}
+
 // main
 setInterval(() => {
     ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, 256, 300);
+    ctx.fillRect(0, 0, 256, 300); // clear canvas
     ctx.fillStyle = "grey";
-    ctx.fillRect(0, 150, 256, 150);
+    ctx.fillRect(0, 150, 256, 150); // draw floor
     const rays: any[] = raycast.castRays(map, camX, camY, camRot, testIntersection);
     rays.forEach((ray: any, index: number): void => {
         if (ray.side) {
