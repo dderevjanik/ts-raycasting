@@ -6,9 +6,9 @@ Small raycast library
 
 ## Overview
 
-![RayCastExample](docs/raycast.png)
+![Raycast Example](docs/raycasting-example.gif)
 
-*(a small example of raycasting. Red line is direction of camera)*
+*(a small example of raycasting, check [source code of this example](example))*
 
 ### What is included
 
@@ -20,13 +20,7 @@ Small raycast library
 - [x] checking distance in test function
 - [x] optional fisheye effect
 
-### Example
-
-![Raycast Example](docs/raycasting-example.gif)
-
-Basic example of raycasting (without textures) can be found in [./example](example)
-
-### Functions
+### API
 
 ![castray-example](docs/castray-fnc.png)
 
