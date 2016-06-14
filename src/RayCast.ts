@@ -124,8 +124,7 @@ export const castRay = (map: number[][], x: number, y: number, intersection: tes
  * @return {Array<IRay>} all rays casted from position, check IRay type
  */
 export const castRays = (map: number[][], x: number, y: number, rot: number, intersection: testintersection, config: IRayConf = defaultConfig): IRay[] => {
-    const castRayFromPosition: (rayRot: number) => IRay
-        = castRay.bind(this, map, x, y, intersection);
+    const castRayFromPosition = (rayRot: number): IRay => castRay(map, x, y, intersection, normalizeAngle(rayRot));
     const dRot: number = (Math.PI / (180 / config.fov)) / config.count; // difference between each ray rot
     const center: number = rot - dRot * (config.count / 2) + (dRot / 2);
 
@@ -134,14 +133,14 @@ export const castRays = (map: number[][], x: number, y: number, rot: number, int
     if (config.fisheye) {
         while(i < config.count) {
             // it's important to normalize rot before casting it, to make sure that rot will continue in direction
-            rays.push(castRayFromPosition(normalizeAngle(i * dRot + center)));
+            rays.push(castRayFromPosition(i * dRot + center));
             i++;
         }
     } else {
         while(i < config.count) {
             // it's important to normalize rot before casting it, to make sure that rot will continue in direction
             // also remove fisheye effect
-            rays.push(removeFisheye(castRayFromPosition(normalizeAngle(i * dRot + center)), rot));
+            rays.push(removeFisheye(castRayFromPosition(i * dRot + center), rot));
             i++;
         }
     }
