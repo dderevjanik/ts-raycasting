@@ -17,6 +17,7 @@ Small raycast library
 - [x] removing fisheye effect
 - [x] checking every ray intersection with world cell
 - [ ] checking x and y position in world in test function
+- [x] option to cast rays from center of FOV
 - [x] checking distance in test function
 - [x] optional fisheye effect
 
@@ -70,6 +71,7 @@ interface IRayConf {
     fov: number;        // field of view, Angle
     count: number;      // number of rays to cast
     fisheye: boolean;   // fisheye effect ?
+    center: boolean;    // casting rays from center ?
 };
 ```
 

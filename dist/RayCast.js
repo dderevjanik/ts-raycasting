@@ -4,7 +4,8 @@ var Utils_1 = require('./Utils');
 var defaultConfig = {
     count: 256,
     fov: 60,
-    fisheye: false
+    fisheye: false,
+    center: true
 };
 /**
  * Cast one ray from position until test fails
@@ -103,7 +104,9 @@ exports.castRays = function (map, x, y, rot, intersection, config) {
     if (config === void 0) { config = defaultConfig; }
     var castRayFromPosition = function (rayRot) { return exports.castRay(map, x, y, intersection, Utils_1.normalizeAngle(rayRot)); };
     var dRot = (Math.PI / (180 / config.fov)) / config.count; // difference between each ray rot
-    var center = rot - dRot * (config.count / 2) + (dRot / 2);
+    var center = (config.center) // start casting ray from center of FOV ?
+        ? (rot - dRot * (config.count / 2) + (dRot / 2))
+        : rot;
     var rays = []; // casted rays
     var i = 0;
     if (config.fisheye) {

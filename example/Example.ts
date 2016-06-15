@@ -1,4 +1,6 @@
 declare const raycast;
+import IRay from './../dist/interfaces/IRay';
+import IRayConf from './../dist/interfaces/IRayConf';
 
 // initialize canvas
 const ctx: CanvasRenderingContext2D = (<HTMLCanvasElement> document.getElementById('canvas')).getContext('2d');
@@ -22,10 +24,10 @@ const map: number[][] = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
-let camX: number = 3.5;
-let camY: number = 3.5;
-let camRot: number = 1.84;
-const h: number = 80;
+let camX = 3.5;
+let camY = 3.5;
+let camRot = 1.84;
+const h = 80;
 
 // test every ray's intersection
 const testIntersection = (row: number, column: number): boolean => {
@@ -47,8 +49,8 @@ setInterval(() => {
     ctx.fillRect(0, 0, 256, 300); // clear canvas
     ctx.fillStyle = "grey";
     ctx.fillRect(0, 150, 256, 150); // draw floor
-    const rays: any[] = raycast.castRays(map, camX, camY, camRot, testIntersection);
-    rays.forEach((ray: any, index: number): void => {
+    const rays: IRay[] = raycast.castRays(map, camX, camY, camRot, testIntersection);
+    rays.forEach((ray: IRay, index: number): void => {
         if (ray.side) {
             ctx.fillStyle = "yellow";
         } else {

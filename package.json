@@ -1,6 +1,6 @@
 {
   "name": "ts-raycasting",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Raycasting in typescript",
   "main": "dist/RayCast.js",
   "typescript": {

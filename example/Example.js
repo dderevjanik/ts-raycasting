@@ -1,3 +1,4 @@
+"use strict";
 // initialize canvas
 var ctx = document.getElementById('canvas').getContext('2d');
 ctx.fillStyle = "black";
