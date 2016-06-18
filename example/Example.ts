@@ -4,8 +4,11 @@ import IRayConf from './../dist/interfaces/IRayConf';
 
 // initialize canvas
 const ctx: CanvasRenderingContext2D = (<HTMLCanvasElement> document.getElementById('canvas')).getContext('2d');
+const mctx: CanvasRenderingContext2D = (<HTMLCanvasElement> document.getElementById('minimap')).getContext('2d');
 ctx.fillStyle = "black";
 ctx.fillRect(0, 0, 256, 300);
+mctx.fillStyle = "black";
+mctx.fillRect(0, 0, 130, 130);
 
 // initiliaze world and camera
 const map: number[][] = [
@@ -43,12 +46,29 @@ const forward = (): void => {
     camY += Math.sin(camRot) * 0.5;
 }
 
+mctx.strokeStyle = "green";
+
 // main
 setInterval(() => {
+    // 2.5d plot
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, 256, 300); // clear canvas
     ctx.fillStyle = "grey";
     ctx.fillRect(0, 150, 256, 150); // draw floor
+    // minimap
+    mctx.fillStyle = "black";
+    mctx.fillRect(0, 0, 130, 130); // clear canvas
+    // render minimap
+    map.forEach((row: number[], r: number) =>
+        row.forEach((cell: number, c: number) => {
+            if (cell === 1) {
+                mctx.fillStyle = "white";
+            } else {
+                mctx.fillStyle = "black";
+            }
+            mctx.fillRect(c * 10, r * 10, c * 10 + 10, r * 10 + 10);
+        }));
+    // render 2.5d plot
     const rays: IRay[] = raycast.castRays(map, camX, camY, camRot, testIntersection);
     rays.forEach((ray: IRay, index: number): void => {
         if (ray.side) {
@@ -57,5 +77,10 @@ setInterval(() => {
             ctx.fillStyle = "blue";
         }
         ctx.fillRect(index, 150 - (h/ray.dist), 1, 2 * (h/ray.dist));
+        // draw on miminap
+        mctx.beginPath();
+        mctx.moveTo(Math.floor(camX * 10), Math.floor(camY * 10));
+        mctx.lineTo(Math.floor(ray.x * 10), Math.floor(ray.y * 10));
+        mctx.stroke();
     });
 }, 1000/3);

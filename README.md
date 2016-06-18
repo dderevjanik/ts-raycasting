@@ -68,7 +68,7 @@ import {IRayConf} from 'ts-raycasting/Interfaces.d.ts';
 
 ```ts
 interface IRayConf {
-    fov: number;        // field of view, Angle
+    fov: number;        // field of view, radians
     count: number;      // number of rays to cast
     fisheye: boolean;   // fisheye effect ?
     center: boolean;    // casting rays from center ?

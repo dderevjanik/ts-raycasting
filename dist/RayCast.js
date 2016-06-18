@@ -3,7 +3,7 @@ var Utils_1 = require('./Utils');
 // default castRays configuration
 var defaultConfig = {
     count: 256,
-    fov: 60,
+    fov: (Math.PI / 2),
     fisheye: false,
     center: true
 };
@@ -103,7 +103,7 @@ exports.castRay = function (map, x, y, intersection, rayRot) {
 exports.castRays = function (map, x, y, rot, intersection, config) {
     if (config === void 0) { config = defaultConfig; }
     var castRayFromPosition = function (rayRot) { return exports.castRay(map, x, y, intersection, Utils_1.normalizeAngle(rayRot)); };
-    var dRot = (Math.PI / (180 / config.fov)) / config.count; // difference between each ray rot
+    var dRot = (Math.PI / (Math.PI / config.fov)) / config.count; // difference between each ray rot
     var center = (config.center) // start casting ray from center of FOV ?
         ? (rot - dRot * (config.count / 2) + (dRot / 2))
         : rot;

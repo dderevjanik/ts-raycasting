@@ -4,7 +4,7 @@ import {normalizeAngle, getQuadrant, removeFisheye} from './Utils';
 // default castRays configuration
 const defaultConfig: IRayConf = {
     count: 256,
-    fov: 60,
+    fov: (Math.PI/2),
     fisheye: false,
     center: true
 };
@@ -126,7 +126,7 @@ export const castRay = (map: number[][], x: number, y: number, intersection: tes
  */
 export const castRays = (map: number[][], x: number, y: number, rot: number, intersection: testintersection, config: IRayConf = defaultConfig): IRay[] => {
     const castRayFromPosition = (rayRot: number): IRay => castRay(map, x, y, intersection, normalizeAngle(rayRot));
-    const dRot: number = (Math.PI / (180 / config.fov)) / config.count; // difference between each ray rot
+    const dRot: number = (Math.PI / (Math.PI / config.fov)) / config.count; // difference between each ray rot
     const center: number = (config.center)  // start casting ray from center of FOV ?
         ? (rot - dRot * (config.count / 2) + (dRot / 2))
         : rot;
