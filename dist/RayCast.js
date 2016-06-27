@@ -2,7 +2,7 @@
 var Utils_1 = require('./Utils');
 // default castRays configuration
 var defaultConfig = {
-    count: 256,
+    rayCount: 256,
     fov: (Math.PI / 2),
     fisheye: false,
     center: true
@@ -103,24 +103,24 @@ exports.castRay = function (map, x, y, intersection, rayRot) {
 exports.castRays = function (map, x, y, rot, intersection, config) {
     if (config === void 0) { config = defaultConfig; }
     var castRayFromPosition = function (rayRot) { return exports.castRay(map, x, y, intersection, Utils_1.normalizeAngle(rayRot)); };
-    var dRot = (Math.PI / (Math.PI / config.fov)) / config.count; // difference between each ray rot
+    var dRot = (config.fov / config.rayCount); // difference between each ray rot
     var center = (config.center) // start casting ray from center of FOV ?
-        ? (rot - dRot * (config.count / 2) + (dRot / 2))
-        : rot;
+        ? (rot - (config.fov / 2))
+        : (rot - (config.fov / 2));
     var rays = []; // casted rays
     var i = 0;
     if (config.fisheye) {
-        while (i < config.count) {
+        while (i < config.rayCount) {
             // it's important to normalize rot before casting it, to make sure that rot will continue in direction
-            rays.push(castRayFromPosition(i * dRot + center));
+            rays.push(castRayFromPosition((i * dRot) + center));
             i++;
         }
     }
     else {
-        while (i < config.count) {
+        while (i < config.rayCount) {
             // it's important to normalize rot before casting it, to make sure that rot will continue in direction
             // also remove fisheye effect
-            rays.push(Utils_1.removeFisheye(castRayFromPosition(i * dRot + center), rot));
+            rays.push(Utils_1.removeFisheye(castRayFromPosition((i * dRot) + center), rot));
             i++;
         }
     }

@@ -24,7 +24,7 @@ var map = [
 ];
 var camX = 3.5;
 var camY = 3.5;
-var camRot = 1.84;
+var camRot = (Math.PI / 2);
 var h = 80;
 // test every ray's intersection
 var testIntersection = function (row, column) {
@@ -38,7 +38,6 @@ var forward = function () {
     camX += Math.cos(camRot) * 0.5;
     camY += Math.sin(camRot) * 0.5;
 };
-mctx.strokeStyle = "green";
 // main
 setInterval(function () {
     // 2.5d plot
@@ -62,6 +61,7 @@ setInterval(function () {
         });
     });
     // render 2.5d plot
+    mctx.strokeStyle = "green";
     var rays = raycast.castRays(map, camX, camY, camRot, testIntersection);
     rays.forEach(function (ray, index) {
         if (ray.side) {
@@ -77,4 +77,10 @@ setInterval(function () {
         mctx.lineTo(Math.floor(ray.x * 10), Math.floor(ray.y * 10));
         mctx.stroke();
     });
+    var dirRay = raycast.castRay(map, camX, camY, testIntersection, camRot);
+    mctx.strokeStyle = "red";
+    mctx.beginPath();
+    mctx.moveTo(Math.floor(camX * 10), Math.floor(camY * 10));
+    mctx.lineTo(Math.floor(dirRay.x * 10), Math.floor(dirRay.y * 10));
+    mctx.stroke();
 }, 1000 / 3);

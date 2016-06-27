@@ -1,6 +1,6 @@
 export interface IRayConf {
     fov: number;
-    count: number;
+    rayCount: number;
     fisheye: boolean;
     center: boolean;
 }

@@ -29,7 +29,7 @@ const map: number[][] = [
 
 let camX = 3.5;
 let camY = 3.5;
-let camRot = 1.84;
+let camRot = (Math.PI/2);
 const h = 80;
 
 // test every ray's intersection
@@ -45,8 +45,6 @@ const forward = (): void => {
     camX += Math.cos(camRot) * 0.5;
     camY += Math.sin(camRot) * 0.5;
 }
-
-mctx.strokeStyle = "green";
 
 // main
 setInterval(() => {
@@ -69,6 +67,7 @@ setInterval(() => {
             mctx.fillRect(c * 10, r * 10, c * 10 + 10, r * 10 + 10);
         }));
     // render 2.5d plot
+    mctx.strokeStyle = "green";
     const rays: IRay[] = raycast.castRays(map, camX, camY, camRot, testIntersection);
     rays.forEach((ray: IRay, index: number): void => {
         if (ray.side) {
@@ -83,4 +82,10 @@ setInterval(() => {
         mctx.lineTo(Math.floor(ray.x * 10), Math.floor(ray.y * 10));
         mctx.stroke();
     });
+    const dirRay: IRay = raycast.castRay(map, camX, camY, testIntersection, camRot);
+    mctx.strokeStyle = "red";
+    mctx.beginPath();
+    mctx.moveTo(Math.floor(camX * 10), Math.floor(camY * 10));
+    mctx.lineTo(Math.floor(dirRay.x * 10), Math.floor(dirRay.y * 10));
+    mctx.stroke();
 }, 1000/3);
