@@ -1,11 +1,12 @@
 {
   "name": "ts-raycasting",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Raycasting in typescript",
   "main": "dist/RayCast.js",
   "typescript": {
     "definition": "dist/RayCast.d.ts"
   },
+  "typings": "dist/RayCast.d.ts",
   "scripts": {
     "build": "npm run build:web && npm run build:node && npm run build:example",
     "build:web": "webpack --config webpack.config.web.js",
