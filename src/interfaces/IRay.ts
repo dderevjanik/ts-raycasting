@@ -1,6 +1,6 @@
-import IPoint from './IPoint';
+import IPoint = require('./IPoint');
 
-export interface IRay extends IPoint {
+interface IRay extends IPoint {
     dist: number;
     side: number;
     rot: number;
@@ -8,4 +8,4 @@ export interface IRay extends IPoint {
     column: number;
 };
 
-export default IRay;
+export = IRay;

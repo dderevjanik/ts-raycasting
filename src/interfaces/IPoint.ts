@@ -1,6 +1,6 @@
-export interface IPoint {
+interface IPoint {
     x: number;
     y: number;
 };
 
-export default IPoint;
+export = IPoint;

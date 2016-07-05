@@ -1,5 +1,5 @@
-export interface IQuadrant {
+interface IQuadrant {
     top: boolean;
     right: boolean;
 }
-export default IQuadrant;
+export = IQuadrant;

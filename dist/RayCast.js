@@ -1,5 +1,5 @@
 "use strict";
-var Utils_1 = require('./Utils');
+var Utils = require('./Utils');
 // default castRays configuration
 var defaultConfig = {
     rayCount: 256,
@@ -16,10 +16,10 @@ var defaultConfig = {
  * @param {number} rayRot - rot of ray in radians
  * @return {IRay} information about ray, check IRay type
  */
-exports.castRay = function (map, x, y, intersection, rayRot) {
+var castRay = function (map, x, y, intersection, rayRot) {
     var angleSin = Math.sin(rayRot);
     var angleCos = Math.cos(rayRot);
-    var quadrant = Utils_1.getQuadrant(rayRot); // in which quadrant is ray looking to
+    var quadrant = Utils.getQuadrant(rayRot); // in which quadrant is ray looking to
     // current cell position in map
     var column = Math.floor(x);
     var row = Math.floor(y);
@@ -100,9 +100,9 @@ exports.castRay = function (map, x, y, intersection, rayRot) {
  * @param {IRayConf} config - additional configuration
  * @return {Array<IRay>} all rays casted from position, check IRay type
  */
-exports.castRays = function (map, x, y, rot, intersection, config) {
+var castRays = function (map, x, y, rot, intersection, config) {
     if (config === void 0) { config = defaultConfig; }
-    var castRayFromPosition = function (rayRot) { return exports.castRay(map, x, y, intersection, Utils_1.normalizeAngle(rayRot)); };
+    var castRayFromPosition = function (rayRot) { return castRay(map, x, y, intersection, Utils.normalizeAngle(rayRot)); };
     var dRot = (config.fov / config.rayCount); // difference between each ray rot
     var center = (config.center) // start casting ray from center of FOV ?
         ? (rot - (config.fov / 2))
@@ -120,14 +120,13 @@ exports.castRays = function (map, x, y, rot, intersection, config) {
         while (i < config.rayCount) {
             // it's important to normalize rot before casting it, to make sure that rot will continue in direction
             // also remove fisheye effect
-            rays.push(Utils_1.removeFisheye(castRayFromPosition((i * dRot) + center), rot));
+            rays.push(Utils.removeFisheye(castRayFromPosition((i * dRot) + center), rot));
             i++;
         }
     }
     return rays;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = {
-    castRay: exports.castRay,
-    castRays: exports.castRays
+module.exports = {
+    castRay: castRay,
+    castRays: castRays
 };

@@ -9,7 +9,6 @@
         "src/interfaces/IQuadrant.ts",
         "src/interfaces/IRay.ts",
         "src/interfaces/IRayConf.ts",
-        "src/Interfaces.ts",
         "src/RayCast.ts",
         "src/Utils.ts"
     ]

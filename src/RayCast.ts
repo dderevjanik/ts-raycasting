@@ -1,5 +1,8 @@
-import {IQuadrant, IRay, IRayConf} from './Interfaces';
-import {normalizeAngle, getQuadrant, removeFisheye} from './Utils';
+import IPoint = require('./interfaces/IPoint');
+import IQuadrant = require('./interfaces/IQuadrant');
+import IRay = require('./interfaces/IRay');
+import IRayConf = require('./interfaces/IRayConf');
+import Utils = require('./Utils');
 
 // default castRays configuration
 const defaultConfig: IRayConf = {
@@ -18,7 +21,7 @@ const defaultConfig: IRayConf = {
  * @param {number} index - current index of intersection
  * @return {boolean} true to stop casting a ray further
  */
-export type testintersection = (row: number, column: number, dist: number, index: number) => boolean;
+type testintersection = (row: number, column: number, dist: number, index: number) => boolean;
 
 /**
  * Cast one ray from position until test fails
@@ -29,10 +32,10 @@ export type testintersection = (row: number, column: number, dist: number, index
  * @param {number} rayRot - rot of ray in radians
  * @return {IRay} information about ray, check IRay type
  */
-export const castRay = (map: number[][], x: number, y: number, intersection: testintersection, rayRot: number): IRay => {
+const castRay = (map: number[][], x: number, y: number, intersection: testintersection, rayRot: number): IRay => {
     const angleSin: number = Math.sin(rayRot);
     const angleCos: number = Math.cos(rayRot);
-    const quadrant: IQuadrant = getQuadrant(rayRot); // in which quadrant is ray looking to
+    const quadrant: IQuadrant = Utils.getQuadrant(rayRot); // in which quadrant is ray looking to
 
     // current cell position in map
     let column: number = Math.floor(x);
@@ -124,8 +127,8 @@ export const castRay = (map: number[][], x: number, y: number, intersection: tes
  * @param {IRayConf} config - additional configuration
  * @return {Array<IRay>} all rays casted from position, check IRay type
  */
-export const castRays = (map: number[][], x: number, y: number, rot: number, intersection: testintersection, config: IRayConf = defaultConfig): IRay[] => {
-    const castRayFromPosition = (rayRot: number): IRay => castRay(map, x, y, intersection, normalizeAngle(rayRot));
+const castRays = (map: number[][], x: number, y: number, rot: number, intersection: testintersection, config: IRayConf = defaultConfig): IRay[] => {
+    const castRayFromPosition = (rayRot: number): IRay => castRay(map, x, y, intersection, Utils.normalizeAngle(rayRot));
     const dRot: number = (config.fov / config.rayCount); // difference between each ray rot
     const center: number = (config.center)  // start casting ray from center of FOV ?
         ? (rot - (config.fov/2))
@@ -142,14 +145,14 @@ export const castRays = (map: number[][], x: number, y: number, rot: number, int
         while(i < config.rayCount) {
             // it's important to normalize rot before casting it, to make sure that rot will continue in direction
             // also remove fisheye effect
-            rays.push(removeFisheye(castRayFromPosition((i * dRot) + center), rot));
+            rays.push(Utils.removeFisheye(castRayFromPosition((i * dRot) + center), rot));
             i++;
         }
     }
     return rays;
 };
 
-export default {
+export = {
     castRay: castRay,
     castRays: castRays
 };

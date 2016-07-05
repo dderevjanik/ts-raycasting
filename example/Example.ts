@@ -1,6 +1,6 @@
 declare const raycast;
-import IRay from './../dist/interfaces/IRay';
-import IRayConf from './../dist/interfaces/IRayConf';
+import IRay = require('./../dist/interfaces/IRay');
+import IRayConf = require('./../dist/interfaces/IRayConf');
 
 // initialize canvas
 const ctx: CanvasRenderingContext2D = (<HTMLCanvasElement> document.getElementById('canvas')).getContext('2d');
