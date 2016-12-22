@@ -10,7 +10,7 @@ Small raycast library
 
 *(a small example of raycasting, check [source code of this example](example))*
 
-### What is included
+### Features
 
 - [x] casting a custom number of rays from camera position with specific direction
 - [x] normalizing angle to be `<0, Math.PI * 2>`
@@ -20,14 +20,18 @@ Small raycast library
 - [x] option to cast rays from center of FOV
 - [x] checking distance in test function
 - [x] optional fisheye effect
+- [ ] CONTINUE, SKIP or STOP in testintersection
+- [ ] fixed-length sized arrays
+- [ ] quadrants as enum flags
+- [ ] npmjs
 
 ### API
 
 ![castray-example](docs/castray-fnc.png)
 
-**castRay**
+#### castRay(map, x, y, intersection, rayRot)
 
-```ts
+```typescript
 castRay(map: number[][], x: number, y: number, intersection: testintersection, rayRot: number): IRay
 ```
 
@@ -36,9 +40,9 @@ every number means a specific wall. To check if ray already hit a wall, there's 
 callback. If testfunction returns false, then it'll stop casting ray further and
 it means that wall was hit.
 
-**castRays**
+#### castRays(map, x, y, rot, intersection, config)
 
-```ts
+```typescript
 castRays(map: number[][], x: number, y: number, rot: number, intersection: testintersection, config: IRayConf = defaultConfig): IRay[]
 ```
 
@@ -48,9 +52,9 @@ To check if ray already hit a wall, there's **intersection** callback.
 If testfunction returns false, then it'll stop casting ray further and it
 means that wall was hit.
 
-**intersection**
+#### intersection(row, column, dist, index)
 
-```ts
+```typescript
 type testintersection = (row: number, column: number, dist: number, index: number) => boolean;
 ```
 
@@ -58,53 +62,18 @@ It's same callback in both **castRay** and **castRays** function, where is put a
 logic of hitting a wall. If testFunctions returns false, it'll stop casting
 ray further (specific ray, not all rays in **castRays** function).
 
-### Interfaces
-
-**IRayConf**
-
-```ts
-import {IRayConf} from 'ts-raycasting/Interfaces.d.ts';
-```
-
-```ts
-interface IRayConf {
-    fov: number;        // field of view, radians
-    count: number;      // number of rays to cast
-    fisheye: boolean;   // fisheye effect ?
-    center: boolean;    // casting rays from center ?
-};
-```
-
-**IRay**
-
-```ts
-import {IRay} from 'ts-raycasting/Interfaces.d.ts';
-```
-
-```ts
-interface IRay {
-    x: number;          // ray's x hit position in map
-    y: number;          // ray's y hit position in map
-    dist: number;       // distance from original position to hit position
-    side: number;       // side of hit, 0 = NS, 1 = WE
-    rot: number;        // ray rot
-    row: number;        // ray's row hit
-    column: number;     // ray's column hit
-};
-```
-
 ## How to use
 
 First, you need import a ts-raycasting library into your project
 
-```ts
+```typescript
 import tsrays from 'ts-raycasting';
 ```
 
 and have 2D map created. For example binary map. 1 means wall, 0 = empty space.
 
-```ts
-const my2DMap: number[][] =  [
+```typescript
+const my2DMap =  [
     [1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 1],
@@ -113,17 +82,17 @@ const my2DMap: number[][] =  [
     [1, 1, 1, 1, 1, 1],
 ];
 
-const camX: number = 3.5;   // starting camera position, column 3.5
-const camY: number = 3.5;   // starting camera position, row 3.5
-const rot: number = 2.34;   // camera direction in radians
-const fov: number = 75;     // field of view angle
-const count: number = 256;  // how many rays to cast
+const camX = 3.5;   // starting camera position, column 3.5
+const camY = 3.5;   // starting camera position, row 3.5
+const rot = 2.34;   // camera direction in radians
+const fov = 75;     // field of view angle
+const count = 256;  // how many rays to cast
 ```
 
 to cast rays from point, use **castRays** function, and test every intersection that ray makes.
 If ray hit a block, return *false* to stop casting ray further and then check position of ray hit in the world (map).
 
-```ts
+```typescript
 // casting ray from a camera
 const rays: IRay[] = tsrays.castRays(my2DMap, camX, camY, rot, (row: number, column: number, dist: number, index: number): boolean => {
     if (my2DMap[row][column] === 1) {
