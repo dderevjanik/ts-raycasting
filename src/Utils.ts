@@ -1,8 +1,9 @@
-import {IQuadrant, IRay} from './Interfaces';
+import { IQuadrant, IRay } from './Interfaces';
 
-const twoPI: number = Math.PI * 2;
-const halfPI: number = Math.PI * 0.5;
-const oneAndHalfPI: number = twoPI * 0.75;
+const twoPI = (Math.PI * 2);
+const halfPI = (Math.PI * 0.5);
+const oneAndHalfPI = (twoPI * 0.75);
+
 /**
  * From which quadrant are we looking out ?
  * @param {number} rot
@@ -19,7 +20,7 @@ export const getQuadrant = (rot: number): IQuadrant => ({
  * @return {number} normalized rot
  */
 export const normalizeAngle = (rot: number): number => {
-    const rayAngle: number = rot % twoPI;
+    const rayAngle = (rot % twoPI);
     return (rayAngle < 0)
         ? twoPI + rayAngle
         : rayAngle;
@@ -34,10 +35,4 @@ export const normalizeAngle = (rot: number): number => {
 export const removeFisheye = (ray: IRay, camRot: number): IRay => {
     ray.dist = ray.dist * Math.cos(camRot - ray.rot);
     return ray;
-};
-
-export default {
-    getQuadrant: getQuadrant,
-    normalizeAngle: normalizeAngle,
-    removeFisheye: removeFisheye
 };

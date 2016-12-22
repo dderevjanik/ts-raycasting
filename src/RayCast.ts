@@ -1,8 +1,9 @@
-import {IQuadrant, IRay, IRayConf} from './Interfaces';
-import {normalizeAngle, getQuadrant, removeFisheye} from './Utils';
+import { IRay, IRayConf } from './Interfaces';
+import { normalizeAngle, getQuadrant, removeFisheye } from './Utils';
+import { ESide } from './Enums';
 
 // default castRays configuration
-const defaultConfig: IRayConf = {
+export const defaultConfig: IRayConf = {
     rayCount: 256,
     fov: (Math.PI/2),
     fisheye: false,
@@ -22,7 +23,7 @@ export type testintersection = (row: number, column: number, dist: number, index
 
 /**
  * Cast one ray from position until test fails
- * @param {Array<Array<number>>} map - 2d world on which will be casted ray
+ * @param {number[][]} map - 2d world on which will be casted ray
  * @param {number} x - coordinate in map
  * @param {number} y - coordinate in map
  * @param {testintersection} intersection - test function is called on every intersection. If fails, fuction will return IRay
@@ -30,44 +31,44 @@ export type testintersection = (row: number, column: number, dist: number, index
  * @return {IRay} information about ray, check IRay type
  */
 export const castRay = (map: number[][], x: number, y: number, intersection: testintersection, rayRot: number): IRay => {
-    const angleSin: number = Math.sin(rayRot);
-    const angleCos: number = Math.cos(rayRot);
-    const quadrant: IQuadrant = getQuadrant(rayRot); // in which quadrant is ray looking to
+    const angleSin = Math.sin(rayRot);
+    const angleCos = Math.cos(rayRot);
+    const quadrant = getQuadrant(rayRot); // in which quadrant is ray looking to
 
     // current cell position in map
-    let column: number = Math.floor(x);
-    let row: number = Math.floor(y);
+    let column = Math.floor(x);
+    let row = Math.floor(y);
 
-    const hSlope: number = (angleSin / angleCos); // tan
-    const vSlope: number = (angleCos / angleSin); // ctan
+    const hSlope = (angleSin / angleCos); // tan
+    const vSlope = (angleCos / angleSin); // ctan
 
-    // horizontal intersection with cell
-    const stepX: number = (quadrant.right) ? 1 : -1;
-    const hdY: number = stepX * hSlope;
+    // NS intersection with cell
+    const stepX = (quadrant.right) ? 1 : -1;
+    const hdY = (stepX * hSlope);
 
-    // vertical intersection with cell
-    const stepY: number = (quadrant.top) ? -1 : 1;
-    const vdX: number = stepY * vSlope;
+    // WE intersection with cell
+    const stepY = (quadrant.top) ? -1 : 1;
+    const vdX = (stepY * vSlope);
 
-    // first horizontal intesection world coordinates in world
-    let hHitX: number = (quadrant.right) ? Math.ceil(x) : column;
-    let hHitY: number = y + ((hHitX - x) * hSlope);
+    // first WE intesection world coordinates in world
+    let hHitX = (quadrant.right) ? Math.ceil(x) : column;
+    let hHitY = y + ((hHitX - x) * hSlope);
 
-    // first vertical intersection world coordinates in world
-    let vHitY: number = (quadrant.top) ? row : Math.ceil(y);
-    let vHitX: number = x + ((vHitY - y) * vSlope);
+    // first NS intersection world coordinates in world
+    let vHitY = (quadrant.top) ? row : Math.ceil(y);
+    let vHitX = x + ((vHitY - y) * vSlope);
 
     // distance from current point to nearest x || y side
-    let sideDistX: number = Math.sqrt((hHitX - x)**2 + (hHitY - y)**2);
-    let sideDistY: number = Math.sqrt((vHitX - x)**2 + (vHitY - y)**2);
+    let sideDistX = Math.sqrt((hHitX - x)**2 + (hHitY - y)**2);
+    let sideDistY = Math.sqrt((vHitX - x)**2 + (vHitY - y)**2);
 
     // distance from x || y  side to another x || y side
-    const deltaDistX: number = Math.sqrt(stepX**2 + hdY**2);
-    const deltaDistY: number = Math.sqrt(vdX**2 + stepY**2);
+    const deltaDistX = Math.sqrt(stepX**2 + hdY**2);
+    const deltaDistY = Math.sqrt(vdX**2 + stepY**2);
 
-    let side: number = (sideDistX < sideDistY) ? 0 : 1; // NS or WE wall hit ?
-    let dist: number = (sideDistX < sideDistY) ? sideDistX : sideDistY; // initial distance from caster to intersection
-    let i: number = 0; // number of intersections
+    let side = (sideDistX < sideDistY) ? ESide.NS : ESide.WE; // NS or WE wall hit ?
+    let dist = (sideDistX < sideDistY) ? sideDistX : sideDistY; // initial distance from caster to intersection
+    let i = 0; // number of intersections
     // @todo send hitX and hitY to test function
     while(intersection(row, column, dist, i)) {
         if (sideDistX < sideDistY) {
@@ -77,7 +78,7 @@ export const castRay = (map: number[][], x: number, y: number, intersection: tes
             // vars passed to testfunction
             column += stepX;
             dist = sideDistX;
-            side = 0;
+            side = ESide.NS;
         } else {
             sideDistY += deltaDistY;
             vHitX += vdX;
@@ -85,25 +86,25 @@ export const castRay = (map: number[][], x: number, y: number, intersection: tes
             // vars passed to testfunction
             row += stepY;
             dist = sideDistY;
-            side = 1;
+            side = ESide.WE;
         }
         i++;
     }
 
     return {
         // ray distance from caster
-        dist: (!side)
+        dist: (side === ESide.NS)
             // removing fisheye effect
             ? (sideDistX - deltaDistX)
             : (sideDistY - deltaDistY),
         // side, which was hit. NS or WE
         side: side,
         // ray x hit
-        x: (side)
+        x: (side === ESide.WE)
             ? (vHitX - vdX)
             : (hHitX - stepX),
         // ray y hit
-        y: (side)
+        y: (side === ESide.WE)
             ? (vHitY - stepY)
             : (hHitY - hdY),
         // ray rot
@@ -117,21 +118,22 @@ export const castRay = (map: number[][], x: number, y: number, intersection: tes
 
 /**
  * Cast rays from position in world
- * @param {Array<Array<number>>} map - 2d world on which will be casted ray
+ * @param {number[][]} map - 2d world on which will be casted ray
  * @param {number} x - camera coordinate in map
  * @param {number} y - camera coordinate in map
  * @param {testintersection} intersection - this function is called on every ray's intersection. If fail, fuction will return IRay
  * @param {IRayConf} config - additional configuration
- * @return {Array<IRay>} all rays casted from position, check IRay type
+ * @return {IRay[]} all rays casted from position, check IRay type
  */
 export const castRays = (map: number[][], x: number, y: number, rot: number, intersection: testintersection, config: IRayConf = defaultConfig): IRay[] => {
     const castRayFromPosition = (rayRot: number): IRay => castRay(map, x, y, intersection, normalizeAngle(rayRot));
-    const dRot: number = (config.fov / config.rayCount); // difference between each ray rot
-    const center: number = (config.center)  // start casting ray from center of FOV ?
+    const dRot = (config.fov / config.rayCount); // difference between each ray rot
+    const center = config.center  // start casting ray from center of FOV ?
         ? (rot - (config.fov/2))
         : (rot - (config.fov/2));
+
     const rays: IRay[] = []; // casted rays
-    let i: number = 0;
+    let i = 0;
     if (config.fisheye) {
         while(i < config.rayCount) {
             // it's important to normalize rot before casting it, to make sure that rot will continue in direction
@@ -147,9 +149,4 @@ export const castRays = (map: number[][], x: number, y: number, rot: number, int
         }
     }
     return rays;
-};
-
-export default {
-    castRay: castRay,
-    castRays: castRays
 };

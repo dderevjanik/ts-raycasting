@@ -4,4 +4,3 @@ export interface IRayConf {
     fisheye: boolean;
     center: boolean;
 }
-export default IRayConf;

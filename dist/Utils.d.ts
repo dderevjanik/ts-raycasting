@@ -18,9 +18,3 @@ export declare const normalizeAngle: (rot: number) => number;
  * @return {IRay} fixed ray
  */
 export declare const removeFisheye: (ray: IRay, camRot: number) => IRay;
-declare var _default: {
-    getQuadrant: (rot: number) => IQuadrant;
-    normalizeAngle: (rot: number) => number;
-    removeFisheye: (ray: IRay, camRot: number) => IRay;
-};
-export default _default;

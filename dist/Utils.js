@@ -1,7 +1,7 @@
 "use strict";
-var twoPI = Math.PI * 2;
-var halfPI = Math.PI * 0.5;
-var oneAndHalfPI = twoPI * 0.75;
+var twoPI = (Math.PI * 2);
+var halfPI = (Math.PI * 0.5);
+var oneAndHalfPI = (twoPI * 0.75);
 /**
  * From which quadrant are we looking out ?
  * @param {number} rot
@@ -17,7 +17,7 @@ exports.getQuadrant = function (rot) { return ({
  * @return {number} normalized rot
  */
 exports.normalizeAngle = function (rot) {
-    var rayAngle = rot % twoPI;
+    var rayAngle = (rot % twoPI);
     return (rayAngle < 0)
         ? twoPI + rayAngle
         : rayAngle;
@@ -31,10 +31,4 @@ exports.normalizeAngle = function (rot) {
 exports.removeFisheye = function (ray, camRot) {
     ray.dist = ray.dist * Math.cos(camRot - ray.rot);
     return ray;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = {
-    getQuadrant: exports.getQuadrant,
-    normalizeAngle: exports.normalizeAngle,
-    removeFisheye: exports.removeFisheye
 };

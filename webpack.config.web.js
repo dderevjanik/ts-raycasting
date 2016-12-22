@@ -27,7 +27,7 @@ module.exports = {
         loaders: [
             {
                 test: /\.ts$/,
-                loader: 'ts-loader?configFileName="tsconfig.web.json"',
+                loader: 'ts-loader?configFileName=tsconfig.web.json',
                 exclude: ['node_modules', 'dist', 'example'],
                 include: [
                     path.resolve(__dirname, 'src')

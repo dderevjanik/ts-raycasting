@@ -1,4 +1,4 @@
-import IPoint from './IPoint';
+import { IPoint } from './IPoint';
 export interface IRay extends IPoint {
     dist: number;
     side: number;
@@ -6,4 +6,3 @@ export interface IRay extends IPoint {
     row: number;
     column: number;
 }
-export default IRay;

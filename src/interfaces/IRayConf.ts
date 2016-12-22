@@ -4,5 +4,3 @@ export interface IRayConf {
     fisheye: boolean;   // fisheye effect ?
     center: boolean;    // casting rays from center ?
 };
-
-export default IRayConf;

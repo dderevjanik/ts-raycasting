@@ -38,6 +38,22 @@ var forward = function () {
     camX += Math.cos(camRot) * 0.5;
     camY += Math.sin(camRot) * 0.5;
 };
+document.addEventListener("keyup", function (e) {
+    switch (e.keyCode) {
+        case 38:
+            forward();
+            break;
+        case 37:
+            camRot -= (Math.PI / 12);
+            break;
+        case 39:
+            camRot += (Math.PI / 12);
+            break;
+        default: {
+            console.log('unexpected key');
+        }
+    }
+});
 // main
 setInterval(function () {
     // 2.5d plot
@@ -83,4 +99,4 @@ setInterval(function () {
     mctx.moveTo(Math.floor(camX * 10), Math.floor(camY * 10));
     mctx.lineTo(Math.floor(dirRay.x * 10), Math.floor(dirRay.y * 10));
     mctx.stroke();
-}, 1000 / 3);
+}, 1000 / 30);

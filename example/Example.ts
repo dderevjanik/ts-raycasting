@@ -1,10 +1,10 @@
 declare const raycast;
-import IRay from './../dist/interfaces/IRay';
-import IRayConf from './../dist/interfaces/IRayConf';
+import { IRay } from './../dist/interfaces/IRay';
 
 // initialize canvas
 const ctx: CanvasRenderingContext2D = (<HTMLCanvasElement> document.getElementById('canvas')).getContext('2d');
 const mctx: CanvasRenderingContext2D = (<HTMLCanvasElement> document.getElementById('minimap')).getContext('2d');
+
 ctx.fillStyle = "black";
 ctx.fillRect(0, 0, 256, 300);
 mctx.fillStyle = "black";
@@ -45,6 +45,23 @@ const forward = (): void => {
     camX += Math.cos(camRot) * 0.5;
     camY += Math.sin(camRot) * 0.5;
 }
+
+document.addEventListener("keyup", (e) => {
+    switch(e.keyCode) {
+        case 38:
+            forward();
+            break;
+        case 37:
+            camRot -= (Math.PI/12);
+            break;
+        case 39:
+            camRot += (Math.PI/12);
+            break;
+        default: {
+            console.log('unexpected key');
+        }
+    }
+});
 
 // main
 setInterval(() => {
@@ -88,4 +105,4 @@ setInterval(() => {
     mctx.moveTo(Math.floor(camX * 10), Math.floor(camY * 10));
     mctx.lineTo(Math.floor(dirRay.x * 10), Math.floor(dirRay.y * 10));
     mctx.stroke();
-}, 1000/3);
+}, 1000/30);

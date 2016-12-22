@@ -1,4 +1,4 @@
-export * from './interfaces/IPoint';
-export * from './interfaces/IQuadrant';
-export * from './interfaces/IRay';
-export * from './interfaces/IRayConf';
+export { IPoint } from './interfaces/IPoint';
+export { IQuadrant } from './interfaces/IQuadrant';
+export { IRay } from './interfaces/IRay';
+export { IRayConf } from './interfaces/IRayConf';

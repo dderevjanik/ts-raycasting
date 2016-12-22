@@ -15,6 +15,7 @@
         "src/interfaces/IRay.ts",
         "src/interfaces/IRayConf.ts",
         "src/Interfaces.ts",
+        "src/Enums.ts",
         "src/RayCast.ts",
         "src/Utils.ts"
     ]
