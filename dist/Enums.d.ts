@@ -7,3 +7,9 @@ export declare const enum ERayTest {
     SKIP_RAY = 1,
     STOP_CASTING = 2,
 }
+export declare enum EDirection {
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST,
+}

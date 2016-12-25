@@ -27,8 +27,8 @@ var camY = 3.5;
 var camRot = (Math.PI / 2);
 var h = 80;
 // test every ray's intersection
-var testIntersection = function (row, column) {
-    if (map[row][column] === 1) {
+var testIntersection = function (row, column, cell) {
+    if (cell === 1) {
         return false;
     }
     return true;

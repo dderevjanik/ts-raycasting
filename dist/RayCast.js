@@ -13,7 +13,7 @@ exports.defaultConfig = {
  * @param {number} x - coordinate in map
  * @param {number} y - coordinate in map
  * @param {testintersection} intersection - test function is called on every intersection. If fails, fuction will return IRay
- * @param {number} rayRot - rot of ray in radians
+ * @param {number} rayRot - camera's rot in radians
  * @return {IRay} information about ray, check IRay type
  */
 exports.castRay = function (map, x, y, intersection, rayRot) {
@@ -47,7 +47,7 @@ exports.castRay = function (map, x, y, intersection, rayRot) {
     var dist = (sideDistX < sideDistY) ? sideDistX : sideDistY; // initial distance from caster to intersection
     var i = 0; // number of intersections
     // @todo send hitX and hitY to test function
-    while (intersection(row, column, dist, i)) {
+    while (intersection(row, column, map[row][column], dist, i)) {
         if (sideDistX < sideDistY) {
             sideDistX += deltaDistX;
             hHitX += stepX;

@@ -33,8 +33,8 @@ let camRot = (Math.PI/2);
 const h = 80;
 
 // test every ray's intersection
-const testIntersection = (row: number, column: number): boolean => {
-    if (map[row][column] === 1) {
+const testIntersection = (row: number, column: number, cell: number): boolean => {
+    if (cell === 1) {
         return false;
     }
     return true;
@@ -44,7 +44,7 @@ const testIntersection = (row: number, column: number): boolean => {
 const forward = (): void => {
     camX += Math.cos(camRot) * 0.5;
     camY += Math.sin(camRot) * 0.5;
-}
+};
 
 document.addEventListener("keyup", (e) => {
     switch(e.keyCode) {

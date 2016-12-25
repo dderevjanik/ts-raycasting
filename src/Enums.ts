@@ -8,3 +8,10 @@ export const enum ERayTest {
     SKIP_RAY = 1,
     STOP_CASTING = 2
 };
+
+export enum EDirection {
+    NORTH = (Math.PI * 1.5),
+    EAST = (Math.PI * 2),
+    SOUTH = (Math.PI / 2),
+    WEST = Math.PI
+};
