@@ -1,4 +1,5 @@
 import { IQuadrant, IRay } from './Interfaces';
+import { EQuadrant } from './Enums';
 
 const twoPI = (Math.PI * 2);
 const halfPI = (Math.PI * 0.5);
@@ -9,10 +10,13 @@ const oneAndHalfPI = (twoPI * 0.75);
  * @param {number} rot
  * @return {IQuadrant}
  */
-export const getQuadrant = (rot: number): IQuadrant => ({
-    top: ((rot < 0) || (rot > Math.PI)) ? true : false,
-    right: ((rot > oneAndHalfPI) || (rot < halfPI)) ? true : false
-});
+
+export const getQuadrant = (rot: number): number => {
+    const quadrant = ((rot < 0) || (rot > Math.PI)) ? EQuadrant.TOP : EQuadrant.BOTTOM;
+    return ((rot > oneAndHalfPI) || (rot < halfPI))
+        ? (quadrant | EQuadrant.RIGTH)
+        : (quadrant | EQuadrant.LEFT);
+};
 
 /**
  * Normalize angle to be between <0, 2*Math.Pi>

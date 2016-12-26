@@ -1,6 +1,6 @@
 import { IRay, IRayConf } from './Interfaces';
 import { normalizeAngle, getQuadrant, removeFisheye } from './Utils';
-import { ESide } from './Enums';
+import { ESide, EQuadrant } from './Enums';
 
 // default castRays configuration
 export const defaultConfig: IRayConf = {
@@ -44,19 +44,19 @@ export const castRay = (map: number[][], x: number, y: number, intersection: tes
     const vSlope = (angleCos / angleSin); // ctan
 
     // NS intersection with cell
-    const stepX = (quadrant.right) ? 1 : -1;
+    const stepX = (quadrant & EQuadrant.RIGTH) ? 1 : -1;
     const hdY = (stepX * hSlope);
 
     // WE intersection with cell
-    const stepY = (quadrant.top) ? -1 : 1;
+    const stepY = (quadrant & EQuadrant.TOP) ? -1 : 1;
     const vdX = (stepY * vSlope);
 
     // first WE intesection world coordinates in world
-    let hHitX = (quadrant.right) ? Math.ceil(x) : column;
+    let hHitX = (quadrant & EQuadrant.RIGTH) ? Math.ceil(x) : column;
     let hHitY = y + ((hHitX - x) * hSlope);
 
     // first NS intersection world coordinates in world
-    let vHitY = (quadrant.top) ? row : Math.ceil(y);
+    let vHitY = (quadrant & EQuadrant.TOP) ? row : Math.ceil(y);
     let vHitX = x + ((vHitY - y) * vSlope);
 
     // distance from current point to nearest x || y side

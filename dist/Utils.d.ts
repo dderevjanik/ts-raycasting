@@ -1,10 +1,10 @@
-import { IQuadrant, IRay } from './Interfaces';
+import { IRay } from './Interfaces';
 /**
  * From which quadrant are we looking out ?
  * @param {number} rot
  * @return {IQuadrant}
  */
-export declare const getQuadrant: (rot: number) => IQuadrant;
+export declare const getQuadrant: (rot: number) => number;
 /**
  * Normalize angle to be between <0, 2*Math.Pi>
  * @param {number} rot - rot to normalize, in radians

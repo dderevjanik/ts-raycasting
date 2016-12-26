@@ -1,6 +1,6 @@
 {
   "name": "ts-raycasting",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Raycasting in typescript",
   "main": "dist/RayCast.js",
   "typescript": {
@@ -8,11 +8,12 @@
   },
   "typings": "dist/RayCast.d.ts",
   "scripts": {
-    "build": "npm run build:web && npm run build:node && npm run build:example",
+    "build": "npm run build:web && npm run build:node && npm run build:examples",
     "build:web": "webpack --config webpack.config.web.js",
     "build:node": "tsc",
-    "build:example": "tsc --project tsconfig.example.json",
-    "test": "mocha test/**/*test.js",
+    "build:examples": "tsc --project examples/",
+    "test": "mocha test/**/*.test.js",
+    "test-dev": "mocha test/**/*.test.js --watch",
     "dev": "webpack-dev-server --config webpack.config.web.js",
     "lint": "node_modules/.bin/tslint src/**/*.ts"
   },

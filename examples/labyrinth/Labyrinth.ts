@@ -1,5 +1,5 @@
 declare const raycast;
-import { IRay } from './../dist/interfaces/IRay';
+import { IRay } from './../../dist/interfaces/IRay';
 
 // initialize canvas
 const ctx: CanvasRenderingContext2D = (<HTMLCanvasElement> document.getElementById('canvas')).getContext('2d');
@@ -86,7 +86,7 @@ setInterval(() => {
     // render 2.5d plot
     mctx.strokeStyle = "green";
     const rays: IRay[] = raycast.castRays(map, camX, camY, camRot, testIntersection);
-    rays.forEach((ray: IRay, index: number): void => {
+    rays.forEach((ray: IRay, index: number) => {
         if (ray.side) {
             ctx.fillStyle = "yellow";
         } else {

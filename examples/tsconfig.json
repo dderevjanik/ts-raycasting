@@ -2,10 +2,10 @@
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",
-        "sourceMap": false,
-        "outDir": "example"
+        "sourceMap": false
     },
     "files": [
-        "example/Example.ts"
+        "./labyrinth/Labyrinth.ts",
+        "./2dmap/2dmap.ts"
     ]
 }

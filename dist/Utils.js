@@ -7,10 +7,12 @@ var oneAndHalfPI = (twoPI * 0.75);
  * @param {number} rot
  * @return {IQuadrant}
  */
-exports.getQuadrant = function (rot) { return ({
-    top: ((rot < 0) || (rot > Math.PI)) ? true : false,
-    right: ((rot > oneAndHalfPI) || (rot < halfPI)) ? true : false
-}); };
+exports.getQuadrant = function (rot) {
+    var quadrant = ((rot < 0) || (rot > Math.PI)) ? 1 /* TOP */ : 4 /* BOTTOM */;
+    return ((rot > oneAndHalfPI) || (rot < halfPI))
+        ? (quadrant | 2 /* RIGTH */)
+        : (quadrant | 8 /* LEFT */);
+};
 /**
  * Normalize angle to be between <0, 2*Math.Pi>
  * @param {number} rot - rot to normalize, in radians

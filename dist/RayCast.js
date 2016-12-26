@@ -26,16 +26,16 @@ exports.castRay = function (map, x, y, intersection, rayRot) {
     var hSlope = (angleSin / angleCos); // tan
     var vSlope = (angleCos / angleSin); // ctan
     // NS intersection with cell
-    var stepX = (quadrant.right) ? 1 : -1;
+    var stepX = (quadrant & 2 /* RIGTH */) ? 1 : -1;
     var hdY = (stepX * hSlope);
     // WE intersection with cell
-    var stepY = (quadrant.top) ? -1 : 1;
+    var stepY = (quadrant & 1 /* TOP */) ? -1 : 1;
     var vdX = (stepY * vSlope);
     // first WE intesection world coordinates in world
-    var hHitX = (quadrant.right) ? Math.ceil(x) : column;
+    var hHitX = (quadrant & 2 /* RIGTH */) ? Math.ceil(x) : column;
     var hHitY = y + ((hHitX - x) * hSlope);
     // first NS intersection world coordinates in world
-    var vHitY = (quadrant.top) ? row : Math.ceil(y);
+    var vHitY = (quadrant & 1 /* TOP */) ? row : Math.ceil(y);
     var vHitX = x + ((vHitY - y) * vSlope);
     // distance from current point to nearest x || y side
     var sideDistX = Math.sqrt(Math.pow((hHitX - x), 2) + Math.pow((hHitY - y), 2));

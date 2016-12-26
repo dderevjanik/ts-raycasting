@@ -9,9 +9,20 @@ export const enum ERayTest {
     STOP_CASTING = 2
 };
 
+export const enum EQuadrant {
+    TOP = 1 << 0,
+    RIGTH = 1 << 1,
+    BOTTOM = 1 << 2,
+    LEFT = 1 << 3
+};
+
 export enum EDirection {
     NORTH = (Math.PI * 1.5),
+    NORTHEAST = (Math.PI * 1.75),
     EAST = (Math.PI * 2),
-    SOUTH = (Math.PI / 2),
-    WEST = Math.PI
+    SOUTHEAST = (Math.PI * 2.25),
+    SOUTH = (Math.PI * 0.5),
+    SOUTHWEST = (Math.PI * 0.75),
+    WEST = Math.PI,
+    NOTHWEST = (Math.PI * 1.25)
 };
