@@ -44,48 +44,49 @@ export const castRay = (map: number[][], x: number, y: number, intersection: tes
     const vSlope = (angleCos / angleSin); // ctan
 
     // NS intersection with cell
-    const stepX = (quadrant & EQuadrant.RIGTH) ? 1 : -1;
-    const hdY = (stepX * hSlope);
+    const verticalStepX = (quadrant & EQuadrant.RIGTH) ? 1 : -1;
+    const verticalStepY = (verticalStepX * hSlope);
 
     // WE intersection with cell
-    const stepY = (quadrant & EQuadrant.TOP) ? -1 : 1;
-    const vdX = (stepY * vSlope);
+    const horizontalStepY = (quadrant & EQuadrant.TOP) ? -1 : 1;
+    const horizontalStepX = (horizontalStepY * vSlope);
 
-    // first WE intesection world coordinates in world
-    let hHitX = (quadrant & EQuadrant.RIGTH) ? Math.ceil(x) : column;
-    let hHitY = y + ((hHitX - x) * hSlope);
+    // intersection with first horizontal line, WE
+    let horizontalX = (quadrant & EQuadrant.RIGTH) ? Math.ceil(x) : column;
+    let horizontalY = y + ((horizontalX - x) * hSlope);
 
-    // first NS intersection world coordinates in world
-    let vHitY = (quadrant & EQuadrant.TOP) ? row : Math.ceil(y);
-    let vHitX = x + ((vHitY - y) * vSlope);
+    // intersection with first vertical line, NS
+    let verticalY = (quadrant & EQuadrant.TOP) ? row : Math.ceil(y);
+    let verticalX = x + ((verticalY - y) * vSlope);
 
     // distance from current point to nearest x || y side
-    let sideDistX = Math.sqrt((hHitX - x)**2 + (hHitY - y)**2);
-    let sideDistY = Math.sqrt((vHitX - x)**2 + (vHitY - y)**2);
+    let sideDistX = Math.sqrt((horizontalX - x)**2 + (horizontalY - y)**2);
+    let sideDistY = Math.sqrt((verticalX - x)**2 + (verticalY - y)**2);
 
     // distance from x || y  side to another x || y side
-    const deltaDistX = Math.sqrt(stepX**2 + hdY**2);
-    const deltaDistY = Math.sqrt(vdX**2 + stepY**2);
+    const deltaDistX = Math.sqrt(verticalStepX**2 + verticalStepY**2);
+    const deltaDistY = Math.sqrt(horizontalStepX**2 + horizontalStepY**2);
 
     let side = (sideDistX < sideDistY) ? ESide.NS : ESide.WE; // NS or WE wall hit ?
     let dist = (sideDistX < sideDistY) ? sideDistX : sideDistY; // initial distance from caster to intersection
     let i = 0; // number of intersections
+
     // @todo send hitX and hitY to test function
     while(intersection(row, column, map[row][column], dist, i)) {
         if (sideDistX < sideDistY) {
             sideDistX += deltaDistX;
-            hHitX += stepX;
-            hHitY += hdY;
+            horizontalX += verticalStepX;
+            horizontalY += verticalStepY;
             // vars passed to testfunction
-            column += stepX;
+            column += verticalStepX;
             dist = sideDistX;
             side = ESide.NS;
         } else {
             sideDistY += deltaDistY;
-            vHitX += vdX;
-            vHitY += stepY;
+            verticalX += horizontalStepX;
+            verticalY += horizontalStepY;
             // vars passed to testfunction
-            row += stepY;
+            row += horizontalStepY;
             dist = sideDistY;
             side = ESide.WE;
         }
@@ -95,19 +96,18 @@ export const castRay = (map: number[][], x: number, y: number, intersection: tes
     return {
         // ray distance from caster
         dist: (side === ESide.NS)
-            // removing fisheye effect
             ? (sideDistX - deltaDistX)
             : (sideDistY - deltaDistY),
         // side, which was hit. NS or WE
         side: side,
         // ray x hit
         x: (side === ESide.WE)
-            ? (vHitX - vdX)
-            : (hHitX - stepX),
+            ? (verticalX - horizontalStepX)
+            : (horizontalX - verticalStepX),
         // ray y hit
         y: (side === ESide.WE)
-            ? (vHitY - stepY)
-            : (hHitY - hdY),
+            ? (verticalY - horizontalStepY)
+            : (horizontalY - verticalStepY),
         // ray rot
         rot: rayRot,
         // ray row hit

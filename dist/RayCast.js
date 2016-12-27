@@ -26,23 +26,23 @@ exports.castRay = function (map, x, y, intersection, rayRot) {
     var hSlope = (angleSin / angleCos); // tan
     var vSlope = (angleCos / angleSin); // ctan
     // NS intersection with cell
-    var stepX = (quadrant & 2 /* RIGTH */) ? 1 : -1;
-    var hdY = (stepX * hSlope);
+    var verticalStepX = (quadrant & 2 /* RIGTH */) ? 1 : -1;
+    var verticalStepY = (verticalStepX * hSlope);
     // WE intersection with cell
-    var stepY = (quadrant & 1 /* TOP */) ? -1 : 1;
-    var vdX = (stepY * vSlope);
-    // first WE intesection world coordinates in world
-    var hHitX = (quadrant & 2 /* RIGTH */) ? Math.ceil(x) : column;
-    var hHitY = y + ((hHitX - x) * hSlope);
-    // first NS intersection world coordinates in world
-    var vHitY = (quadrant & 1 /* TOP */) ? row : Math.ceil(y);
-    var vHitX = x + ((vHitY - y) * vSlope);
+    var horizontalStepY = (quadrant & 1 /* TOP */) ? -1 : 1;
+    var horizontalStepX = (horizontalStepY * vSlope);
+    // intersection with first horizontal line, WE
+    var horizontalX = (quadrant & 2 /* RIGTH */) ? Math.ceil(x) : column;
+    var horizontalY = y + ((horizontalX - x) * hSlope);
+    // intersection with first vertical line, NS
+    var verticalY = (quadrant & 1 /* TOP */) ? row : Math.ceil(y);
+    var verticalX = x + ((verticalY - y) * vSlope);
     // distance from current point to nearest x || y side
-    var sideDistX = Math.sqrt(Math.pow((hHitX - x), 2) + Math.pow((hHitY - y), 2));
-    var sideDistY = Math.sqrt(Math.pow((vHitX - x), 2) + Math.pow((vHitY - y), 2));
+    var sideDistX = Math.sqrt(Math.pow((horizontalX - x), 2) + Math.pow((horizontalY - y), 2));
+    var sideDistY = Math.sqrt(Math.pow((verticalX - x), 2) + Math.pow((verticalY - y), 2));
     // distance from x || y  side to another x || y side
-    var deltaDistX = Math.sqrt(Math.pow(stepX, 2) + Math.pow(hdY, 2));
-    var deltaDistY = Math.sqrt(Math.pow(vdX, 2) + Math.pow(stepY, 2));
+    var deltaDistX = Math.sqrt(Math.pow(verticalStepX, 2) + Math.pow(verticalStepY, 2));
+    var deltaDistY = Math.sqrt(Math.pow(horizontalStepX, 2) + Math.pow(horizontalStepY, 2));
     var side = (sideDistX < sideDistY) ? 0 /* NS */ : 1 /* WE */; // NS or WE wall hit ?
     var dist = (sideDistX < sideDistY) ? sideDistX : sideDistY; // initial distance from caster to intersection
     var i = 0; // number of intersections
@@ -50,19 +50,19 @@ exports.castRay = function (map, x, y, intersection, rayRot) {
     while (intersection(row, column, map[row][column], dist, i)) {
         if (sideDistX < sideDistY) {
             sideDistX += deltaDistX;
-            hHitX += stepX;
-            hHitY += hdY;
+            horizontalX += verticalStepX;
+            horizontalY += verticalStepY;
             // vars passed to testfunction
-            column += stepX;
+            column += verticalStepX;
             dist = sideDistX;
             side = 0 /* NS */;
         }
         else {
             sideDistY += deltaDistY;
-            vHitX += vdX;
-            vHitY += stepY;
+            verticalX += horizontalStepX;
+            verticalY += horizontalStepY;
             // vars passed to testfunction
-            row += stepY;
+            row += horizontalStepY;
             dist = sideDistY;
             side = 1 /* WE */;
         }
@@ -77,12 +77,12 @@ exports.castRay = function (map, x, y, intersection, rayRot) {
         side: side,
         // ray x hit
         x: (side === 1 /* WE */)
-            ? (vHitX - vdX)
-            : (hHitX - stepX),
+            ? (verticalX - horizontalStepX)
+            : (horizontalX - verticalStepX),
         // ray y hit
         y: (side === 1 /* WE */)
-            ? (vHitY - stepY)
-            : (hHitY - hdY),
+            ? (verticalY - horizontalStepY)
+            : (horizontalY - verticalStepY),
         // ray rot
         rot: rayRot,
         // ray row hit

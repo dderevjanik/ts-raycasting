@@ -69,7 +69,7 @@ describe('castRay()', () => {
             assert.equal(castedRay.column, 11);
         });
 
-        it('shoudl cast a ray from position [6, 7] to west', () => {
+        it('should cast a ray from position [6, 7] to west', () => {
             const castedRay = rayCast.castRay(testmaps.map12x12, 6, 7, helper.testUntilHit, enums.EDirection.WEST);
             assert.equal(castedRay.x, 1);
             assert.equal(castedRay.y, 7);
