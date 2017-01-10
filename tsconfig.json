@@ -1,22 +1,23 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "sourceMap": false,
-        "noImplicitAny": false,
-        "noLib": false,
-        "removeComments": false,
         "declaration": true,
-        "outDir": "dist"
+        "module": "commonjs",
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitUseStrict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noLib": false,
+        "outDir": "dist",
+        "preserveConstEnums": true,
+        "removeComments": false,
+        "sourceMap": false,
+        "strictNullChecks": true,
+        "target": "es5"
     },
     "files": [
-        "src/interfaces/IPoint.ts",
-        "src/interfaces/IQuadrant.ts",
-        "src/interfaces/IRay.ts",
-        "src/interfaces/IRayConf.ts",
-        "src/Interfaces.ts",
-        "src/Enums.ts",
-        "src/RayCast.ts",
-        "src/Utils.ts"
+        "src/RayCast.ts"
     ]
 }
