@@ -1,26 +1,19 @@
-"use strict";
 var Utils_1 = require("./Utils");
-// default castRays configuration
-exports.defaultConfig = {
-    rayCount: 256,
-    fov: (Math.PI / 2),
-    fisheye: false,
-    center: true
-};
+var Config_1 = require("./Config");
 /**
  * Cast one ray from position until test fails
- * @param {number[][]} map - 2d world on which will be casted ray
- * @param {number} x - coordinate in map
- * @param {number} y - coordinate in map
- * @param {testintersection} intersection - test function is called on every intersection. If fails, fuction will return IRay
+ * @param {number[][]} world - 2d world on which will be casted ray
+ * @param {number} x - camera's X coordinate in world
+ * @param {number} y - camera's Y coordinate in world
+ * @param {testintersection} intersection - test function is called on every ray's intersection with world's grid. If fails, fuction will return IRay
  * @param {number} rayRot - camera's rot in radians
  * @return {IRay} information about ray, check IRay type
  */
-exports.castRay = function (map, x, y, intersection, rayRot) {
+exports.castRay = function (world, x, y, intersection, rayRot) {
     var angleSin = Math.sin(rayRot);
     var angleCos = Math.cos(rayRot);
     var quadrant = Utils_1.getQuadrant(rayRot); // in which quadrant is ray looking to
-    // current cell position in map
+    // current cell position in world
     var column = Math.floor(x);
     var row = Math.floor(y);
     var hSlope = (angleSin / angleCos); // tan
@@ -47,12 +40,12 @@ exports.castRay = function (map, x, y, intersection, rayRot) {
     var dist = (sideDistX < sideDistY) ? sideDistX : sideDistY; // initial distance from caster to intersection
     var i = 0; // number of intersections
     // @todo send hitX and hitY to test function
-    while (intersection(row, column, map[row][column], dist, i)) {
+    while (intersection(row, column, world[row][column], dist, i)) {
         if (sideDistX < sideDistY) {
             sideDistX += deltaDistX;
             horizontalX += verticalStepX;
             horizontalY += verticalStepY;
-            // vars passed to testfunction
+            // arguments passed to testFunction
             column += verticalStepX;
             dist = sideDistX;
             side = 0 /* NS */;
@@ -61,7 +54,7 @@ exports.castRay = function (map, x, y, intersection, rayRot) {
             sideDistY += deltaDistY;
             verticalX += horizontalStepX;
             verticalY += horizontalStepY;
-            // vars passed to testfunction
+            // arguments passed to testFunction
             row += horizontalStepY;
             dist = sideDistY;
             side = 1 /* WE */;
@@ -75,54 +68,46 @@ exports.castRay = function (map, x, y, intersection, rayRot) {
             : (sideDistY - deltaDistY),
         // side, which was hit. NS or WE
         side: side,
-        // ray x hit
+        // ray's real X hit position in world
         x: (side === 1 /* WE */)
             ? (verticalX - horizontalStepX)
             : (horizontalX - verticalStepX),
-        // ray y hit
+        // ray's real Y hit position in world
         y: (side === 1 /* WE */)
             ? (verticalY - horizontalStepY)
             : (horizontalY - verticalStepY),
-        // ray rot
+        // ray's rot
         rot: rayRot,
-        // ray row hit
+        // ray's row hit
         row: row,
-        // ray column hit
+        // ray's column hit
         column: column
     };
 };
 /**
  * Cast rays from position in world
- * @param {number[][]} map - 2d world on which will be casted ray
- * @param {number} x - camera coordinate in map
- * @param {number} y - camera coordinate in map
+ * @param {number[][]} world - 2d world on which will be casted ray
+ * @param {number} x - camera X coordinate in world
+ * @param {number} y - camera Y coordinate in world
  * @param {testintersection} intersection - this function is called on every ray's intersection. If fail, fuction will return IRay
  * @param {IRayConf} config - additional configuration
  * @return {IRay[]} all rays casted from position, check IRay type
  */
-exports.castRays = function (map, x, y, rot, intersection, config) {
-    if (config === void 0) { config = exports.defaultConfig; }
-    var castRayFromPosition = function (rayRot) { return exports.castRay(map, x, y, intersection, Utils_1.normalizeAngle(rayRot)); };
-    var dRot = (config.fov / config.rayCount); // difference between each ray rot
+exports.castRays = function (world, x, y, rot, intersection, config) {
+    if (config === void 0) { config = Config_1.defaultConfig; }
+    var castRayFromCurrentPosition = function (rayRot) { return exports.castRay(world, x, y, intersection, Utils_1.normalizeAngle(rayRot)); };
+    var castRayPipe = (config.fisheye)
+        ? castRayFromCurrentPosition
+        : function (rayRot) { return Utils_1.removeFisheye(castRayFromCurrentPosition(rayRot), rot); };
     var center = config.center // start casting ray from center of FOV ?
         ? (rot - (config.fov / 2))
         : (rot - (config.fov / 2));
+    var dRot = (config.fov / config.rayCount); // difference between each ray rot
     var rays = []; // casted rays
     var i = 0;
-    if (config.fisheye) {
-        while (i < config.rayCount) {
-            // it's important to normalize rot before casting it, to make sure that rot will continue in direction
-            rays.push(castRayFromPosition((i * dRot) + center));
-            i++;
-        }
-    }
-    else {
-        while (i < config.rayCount) {
-            // it's important to normalize rot before casting it, to make sure that rot will continue in direction
-            // also remove fisheye effect
-            rays.push(Utils_1.removeFisheye(castRayFromPosition((i * dRot) + center), rot));
-            i++;
-        }
+    while (i < config.rayCount) {
+        rays.push(castRayPipe((i * dRot) + center));
+        i++;
     }
     return rays;
 };

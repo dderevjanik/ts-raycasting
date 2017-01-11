@@ -1,16 +1,13 @@
-"use strict";
-;
-;
-;
-var EDirection;
-(function (EDirection) {
-    EDirection[EDirection["NORTH"] = (Math.PI * 1.5)] = "NORTH";
-    EDirection[EDirection["NORTHEAST"] = (Math.PI * 1.75)] = "NORTHEAST";
-    EDirection[EDirection["EAST"] = (Math.PI * 2)] = "EAST";
-    EDirection[EDirection["SOUTHEAST"] = (Math.PI * 2.25)] = "SOUTHEAST";
-    EDirection[EDirection["SOUTH"] = (Math.PI * 0.5)] = "SOUTH";
-    EDirection[EDirection["SOUTHWEST"] = (Math.PI * 0.75)] = "SOUTHWEST";
-    EDirection[EDirection["WEST"] = Math.PI] = "WEST";
-    EDirection[EDirection["NOTHWEST"] = (Math.PI * 1.25)] = "NOTHWEST";
-})(EDirection = exports.EDirection || (exports.EDirection = {}));
+var EDirection_1 = require("./enums/EDirection");
+exports.EDirection = EDirection_1.EDirection;
+var EQuadrant_1 = require("./enums/EQuadrant");
+exports.EQuadrant = EQuadrant_1.EQuadrant;
+var ESide_1 = require("./enums/ESide");
+exports.ESide = ESide_1.ESide;
+var ERayTest;
+(function (ERayTest) {
+    ERayTest[ERayTest["CONTINUE"] = 0] = "CONTINUE";
+    ERayTest[ERayTest["SKIP_RAY"] = 1] = "SKIP_RAY";
+    ERayTest[ERayTest["STOP_CASTING"] = 2] = "STOP_CASTING";
+})(ERayTest = exports.ERayTest || (exports.ERayTest = {}));
 ;

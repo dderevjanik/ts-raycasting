@@ -1,4 +1,4 @@
-import { IQuadrant, IRay } from './Interfaces';
+import { IRay } from './Interfaces';
 import { EQuadrant } from './Enums';
 
 const twoPI = (Math.PI * 2);
@@ -8,7 +8,7 @@ const oneAndHalfPI = (twoPI * 0.75);
 /**
  * From which quadrant are we looking out ?
  * @param {number} rot
- * @return {IQuadrant}
+ * @return {IQuadrant} flags
  */
 
 export const getQuadrant = (rot: number): number => {
@@ -20,7 +20,7 @@ export const getQuadrant = (rot: number): number => {
 
 /**
  * Normalize angle to be between <0, 2*Math.Pi>
- * @param {number} rot - rot to normalize, in radians
+ * @param {number} rot - to normalize, in radians
  * @return {number} normalized rot
  */
 export const normalizeAngle = (rot: number): number => {
@@ -31,10 +31,11 @@ export const normalizeAngle = (rot: number): number => {
 };
 
 /**
- * Remove fisheye effect
+ * Remove fisheye effect from a ray
+ * @desc ray's distance will be aligned with camera's rot
  * @param {IRay} ray - ray to fix
- * @param {number} camRot - camera rot
- * @return {IRay} fixed ray
+ * @param {number} camRot - camera's rot
+ * @return {IRay} ray with fixed distance
  */
 export const removeFisheye = (ray: IRay, camRot: number): IRay => {
     ray.dist = ray.dist * Math.cos(camRot - ray.rot);
