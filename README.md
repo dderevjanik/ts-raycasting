@@ -6,7 +6,7 @@ Small raycast library
 
 ## Overview
 
-![Raycast Example](docs/raycasting-example.gif)
+![Raycast Example](docs/img/raycasting-example.gif)
 
 *(a small example of raycasting, check [source code of this example](example))*
 
@@ -27,7 +27,7 @@ Small raycast library
 
 ### API
 
-![castray-example](docs/castray-fnc.png)
+![castray-example](docs/img/castray-fnc.png)
 
 #### castRay(map, x, y, intersection, rayRot)
 
