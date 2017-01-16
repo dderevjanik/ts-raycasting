@@ -99,10 +99,10 @@ exports.castRays = function (world, x, y, rot, intersection, config) {
     var castRayPipe = (config.fisheye)
         ? castRayFromCurrentPosition
         : function (rayRot) { return Utils_1.removeFisheye(castRayFromCurrentPosition(rayRot), rot); };
-    var center = config.center // start casting ray from center of FOV ?
+    var center = config.center // start casting rays from center of FOV ?
         ? (rot - (config.fov / 2))
         : (rot - (config.fov / 2));
-    var dRot = (config.fov / config.rayCount); // difference between each ray rot
+    var dRot = (config.fov / config.rayCount); // difference between each ray's rot
     var rays = []; // casted rays
     var i = 0;
     while (i < config.rayCount) {

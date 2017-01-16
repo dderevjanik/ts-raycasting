@@ -44,7 +44,7 @@ describe('Utils', () => {
             assert.equal(normalized.toFixed(2), 1.13);
         });
 
-        it('should normalize angle -12.3 -> ', () => {
+        it('should normalize angle -12.3 -> 6.02', () => {
             const normalized = utils.normalizeAngle(12.3);
             assert.equal(normalized.toFixed(2), 6.02);
         });
