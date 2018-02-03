@@ -1,5 +1,7 @@
 # TS RayCasting
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/dderevjanik/ts-raycasting.svg)](https://greenkeeper.io/)
+
 ![Travis](https://travis-ci.org/dderevjanik/ts-raycasting.svg?branch=master)
 
 ![Raycast Example](docs/img/raycasting-example.gif)
