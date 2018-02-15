@@ -1,4 +1,4 @@
-"use strict";
+/// <reference path="../../dist/interfaces/IRay.d.ts"/>
 // initialize canvas
 var ctx = document.getElementById('canvas').getContext('2d');
 var mctx = document.getElementById('minimap').getContext('2d');

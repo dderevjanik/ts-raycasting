@@ -1,6 +1,6 @@
 {
   "name": "ts-raycasting",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Raycasting in typescript",
   "main": "dist/RayCast.js",
   "typescript": {
@@ -8,37 +8,48 @@
   },
   "typings": "dist/RayCast.d.ts",
   "scripts": {
-    "build": "npm run build:web && npm run build:node && npm run build:examples",
-    "build:web": "webpack --config webpack.config.web.js",
+    "build":
+      "npm run build:web && npm run build:node && npm run build:examples",
     "build:node": "tsc",
+    "build:web": "webpack --config webpack.config.js",
     "build:examples": "tsc --project examples/",
-    "test": "mocha test/**/*.test.js",
-    "test-dev": "mocha test/**/*.test.js --watch",
-    "dev": "webpack-dev-server --config webpack.config.web.js",
-    "lint": "node_modules/.bin/tslint src/**/*.ts"
+    "test": "jest",
+    "test:dev": "jest --watch",
+    "dev": "tsc --watch",
+    "lint": "npm run lint:src  && npm run lint:test",
+    "lint:src": "prettier --write src/**/*.ts",
+    "lint:test": "prettier --write test/**/*.ts"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "collectCoverage": false,
+    "testEnvironment": "node"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dderevjanik/ts-raycasting"
   },
-  "keywords": [
-    "rays",
-    "raycast",
-    "raycasting",
-    "2.5d",
-    "pseudo3d"
-  ],
+  "keywords": ["rays", "raycast", "raycasting", "2.5d", "pseudo3d"],
   "author": {
     "name": "Daniel Derevjanik",
     "email": "daniel.derevjanik@gmail.com"
   },
   "license": "MIT",
   "devDependencies": {
-    "mocha": "^3.2.0",
-    "ts-loader": "^1.3.3",
-    "tslint": "^4.3.1",
-    "typescript": "^2.1.4",
-    "webpack": "^1.14.0",
-    "webpack-dev-server": "^1.16.2"
+    "@types/jest": "^22.1.2",
+    "jest": "^22.3.0",
+    "prettier": "^1.10.2",
+    "ts-jest": "^22.0.4",
+    "ts-loader": "^3.5.0",
+    "typescript": "^2.7.2",
+    "webpack": "^3.11.0"
   }
 }

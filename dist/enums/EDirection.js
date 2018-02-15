@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var EDirection;
 (function (EDirection) {
     EDirection[EDirection["NORTH"] = (Math.PI * 1.5)] = "NORTH";

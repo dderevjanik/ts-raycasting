@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Utils_1 = require("./Utils");
 var Config_1 = require("./Config");
 /**

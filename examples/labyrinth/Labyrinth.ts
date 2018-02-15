@@ -1,9 +1,8 @@
-declare const raycast;
-import { IRay } from './../../dist/interfaces/IRay';
-
+/// <reference path="../../dist/interfaces/IRay.d.ts"/>
+declare const raycast: any;
 // initialize canvas
-const ctx: CanvasRenderingContext2D = (<HTMLCanvasElement> document.getElementById('canvas')).getContext('2d');
-const mctx: CanvasRenderingContext2D = (<HTMLCanvasElement> document.getElementById('minimap')).getContext('2d');
+const ctx = (<HTMLCanvasElement>document.getElementById('canvas')).getContext('2d');
+const mctx = (<HTMLCanvasElement>document.getElementById('minimap')).getContext('2d');
 
 ctx.fillStyle = "black";
 ctx.fillRect(0, 0, 256, 300);
@@ -29,7 +28,7 @@ const map: number[][] = [
 
 let camX = 3.5;
 let camY = 3.5;
-let camRot = (Math.PI/2);
+let camRot = (Math.PI / 2);
 const h = 80;
 
 // test every ray's intersection
@@ -47,15 +46,15 @@ const forward = (): void => {
 };
 
 document.addEventListener("keyup", (e) => {
-    switch(e.keyCode) {
+    switch (e.keyCode) {
         case 38:
             forward();
             break;
         case 37:
-            camRot -= (Math.PI/12);
+            camRot -= (Math.PI / 12);
             break;
         case 39:
-            camRot += (Math.PI/12);
+            camRot += (Math.PI / 12);
             break;
         default: {
             console.log('unexpected key');
@@ -92,7 +91,7 @@ setInterval(() => {
         } else {
             ctx.fillStyle = "blue";
         }
-        ctx.fillRect(index, 150 - (h/ray.dist), 1, 2 * (h/ray.dist));
+        ctx.fillRect(index, 150 - (h / ray.dist), 1, 2 * (h / ray.dist));
         // draw on miminap
         mctx.beginPath();
         mctx.moveTo(Math.floor(camX * 10), Math.floor(camY * 10));
@@ -105,4 +104,4 @@ setInterval(() => {
     mctx.moveTo(Math.floor(camX * 10), Math.floor(camY * 10));
     mctx.lineTo(Math.floor(dirRay.x * 10), Math.floor(dirRay.y * 10));
     mctx.stroke();
-}, 1000/30);
+}, 1000 / 30);

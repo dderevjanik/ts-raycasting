@@ -1,6 +1,6 @@
-const MAX_INTERSECTIONS = 128;
+export const MAX_INTERSECTIONS = 128;
 
-const testUntilHit = (row, column, cell, dist, i) => {
+export const testUntilHit = (row, column, cell, dist, i) => {
     if (i > MAX_INTERSECTIONS) {
         console.log('over');
         return false;
@@ -9,8 +9,4 @@ const testUntilHit = (row, column, cell, dist, i) => {
         return false;
     }
     return true;
-};
-
-module.exports = {
-    testUntilHit: testUntilHit
 };

@@ -1,13 +1,11 @@
-const assert = require('assert');
-const lookuptables = require('./../dist/LookupTables');
+import * as LookupTable from '../src/LookupTables';
 
 describe('LookupTables', () => {
 
     describe('createSinTable()', () => {
 
         it('should generate Sin lookup table, 3 segments', () => {
-            const table = lookuptables.createSinTable(3);
-            console.log(table);
+            const table = LookupTable.createSinTable(3);
         });
 
     });
@@ -15,7 +13,7 @@ describe('LookupTables', () => {
     describe('createCosTable()', () => {
 
         it('should generate Cos lookup table, 3 segments', () => {
-            const table = lookuptables.createCosTable(3);
+            const table = LookupTable.createCosTable(3);
         });
 
     });
@@ -23,7 +21,7 @@ describe('LookupTables', () => {
     describe('createTanTable()', () => {
 
         it('should generate Tan lookup table, 3 segments', () => {
-            const table = lookuptables.createTanTable(3);
+            const table = LookupTable.createTanTable(3);
         });
 
     });
@@ -31,7 +29,7 @@ describe('LookupTables', () => {
     describe('createCTanTable()', () => {
 
         it('should generate CTan lookup table, 3 segments', () => {
-            const table = lookuptables.createCTanTable(3);
+            const table = LookupTable.createCTanTable(3);
         });
 
     });

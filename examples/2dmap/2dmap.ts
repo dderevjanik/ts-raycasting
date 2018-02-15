@@ -1,7 +1,6 @@
-declare const raycast;
-import { IRay } from './../../dist/interfaces/IRay';
+/// <reference path="../../dist/interfaces/IRay.d.ts"/>
 
-const map: number[][] = [
+let map: number[][] = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 1, 0, 1, 0, 1, 1],
     [1, 0, 1, 0, 1, 0, 0, 0, 0, 1],
@@ -20,7 +19,7 @@ const camera = {
 };
 
 const intersection = (row: number, column: number, cell: number, dist: number) => {
-    if(cell === 1) {
+    if (cell === 1) {
         return false;
     }
     return true;
@@ -45,8 +44,8 @@ const render = (map: number[][], rays: IRay[]) => {
     ctx.strokeStyle = 'green';
     rays.forEach((ray: IRay, index: number) => {
         ctx.beginPath();
-        ctx.moveTo(Math.floor(camera.x *10), Math.floor(camera.y*10));
-        ctx.lineTo(Math.floor(ray.x*10), Math.floor(ray.y*10));
+        ctx.moveTo(Math.floor(camera.x * 10), Math.floor(camera.y * 10));
+        ctx.lineTo(Math.floor(ray.x * 10), Math.floor(ray.y * 10));
         ctx.stroke();
     });
 };

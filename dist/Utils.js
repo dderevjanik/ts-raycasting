@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var twoPI = (Math.PI * 2);
 var halfPI = (Math.PI * 0.5);
 var oneAndHalfPI = (twoPI * 0.75);

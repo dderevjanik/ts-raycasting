@@ -1,4 +1,4 @@
-"use strict";
+/// <reference path="../../dist/interfaces/IRay.d.ts"/>
 var map = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 1, 0, 1, 0, 1, 1],
